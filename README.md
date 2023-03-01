@@ -26,7 +26,7 @@ Activate environment and Install the dependencies.
 $ conda activate <envname>
 $ pip install -r requirements.txt
 ```
-(maybe adapt exact versions in `requirements.txt` and upgrade pip before: `pip install --upgrade pip`)
+(maybe adapt exact versions in `requirements.txt` and upgrade pip before: `pip install --upgrade pip` or execute everything with `pip3`)
 
 ## Usage
 
