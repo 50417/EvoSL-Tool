@@ -26,12 +26,13 @@ Activate environment and Install the dependencies.
 $ conda activate <envname>
 $ pip install -r requirements.txt
 ```
+(maybe adapt exact versions in `requirements.txt` and upgrade pip before: `pip install --upgrade pip` or execute everything with `pip3`)
 
 ## Usage
 
 ### 1. SimMiner
 The tool mines Simulink repository from GitHub and searches for project since 2008. The repository is a cloned. Make sure you have enough storage in your system.
-- Run
+- In `SimMiner` Run
 ```sh
 $ python downloadRepoFromGithub.py --query=<QUERY> --dir=<DIRECTORY_TO_STORE_PROJECTS> --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> --token=<GITHUB_AUTHENTICATION_TOKEN>
 ``` 
@@ -67,7 +68,7 @@ All data will be stored in model_compare_new<Date>.sqlite file. You can use the 
    [Compare Model Snapshot]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/%40compareModelSnapshot>
    [Project Evolution]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/project_evolution> 
    [Model Comparision Utility]: <https://zenodo.org/record/6410073#.Y-VQINLMK-Y>
-   [EPHCC (or Banshee)]: <https://github.com/PowerSystemsHIL/EPHCC>
+   [EPHCC]: <https://github.com/PowerSystemsHIL/EPHCC>
    [Repository Mining for Changes in Simulink Models]: <https://ieeexplore.ieee.org/document/9592466>
    [MATLAB Installation]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/MATLABInstallation.md>
 
