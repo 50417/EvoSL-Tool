@@ -142,14 +142,13 @@ class forked_project():
 
 		'''
 		success = True
-
-		topic = ",".join(repo.get_topics())
-		languages = self.get_repo_languages(repo)
-		if(topic != ""):
-			logging.info("Topics : "+ topic)
-		if(languages != ""):
-			logging.info("Languages : "+ languages)
 		try: 
+			topic = ",".join(repo.get_topics())
+			languages = self.get_repo_languages(repo)
+			if(topic != ""):
+				logging.info("Topics : "+ topic)
+			if(languages != ""):
+				logging.info("Languages : "+ languages)
 			self.databaseHandler.insert(repo.id,project_id, repo.name,repo.owner.login,repo.owner.type, repo.owner.id, repo.private,
 									repo.html_url, repo.description, repo.fork, repo.url,
 									repo.created_at, repo.updated_at, repo.pushed_at,
