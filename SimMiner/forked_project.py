@@ -5,6 +5,7 @@ import sqlite3
 from sqlite3 import Error
 from subprocess import Popen, PIPE
 import shutil
+import time
 from github import Github , GithubException
 from Simulinkforkedrepoinfo import SimulinkForkedRepoInfoController
 logging.basicConfig(filename='github_forked.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -30,6 +31,9 @@ class forked_project():
 
 		else:
 			logging.info("Directory " + self.dir_name + " already exists")
+
+		self.cur_api_call = 0
+		self.start_time = time.time()
 
 	def run_SQL(self, sql):
 	    cur = self.read_conn.cursor()
@@ -60,14 +64,17 @@ class forked_project():
 		result = []
 		page_size = all_pages._PaginatedList__requester.per_page
 		pages = (all_pages.totalCount - 1) // page_size + 1
+		#num_api_call = 1
 		for page in range(0, pages):
 			# Retry loading page 
 			while len(result) < min((page+1) * page_size, all_pages.totalCount):
+				#num_api_call += 1
+				self.sleep_check(1)
 				# if required due to weird condition: https://github.com/PyGithub/PyGithub/blob/001970d4a828017f704f6744a5775b4207a6523c/github/PaginatedList.py#L242
 				elements = all_pages.get_page(-1 if page == 0 else page)
 				if len(elements) == page_size or page == pages-1 and len(elements) == all_pages.totalCount % page_size:
 					result.extend(elements)
-		return result,pages
+		return result
 
 	def create_connection(self, db_file):
 	    """ create a database connection to the SQLite database
@@ -88,13 +95,16 @@ class forked_project():
 			Gets forked projects from the API of the provided project
 			returns: 
 				repo_forks_list : forked repo of project_url as Python list
+				no_of_api_call: number of api calls
 		'''
 		
 		project_name = project_url.replace(self.common_url,"")
 
 		repo = self.pygithub.get_repo(project_name)
+		self.sleep_check(1)
 		try: 
 			repo_forks = repo.get_forks()
+			self.sleep_check(1)
 		except Exception as e: 
 			logging.info("Error getting list of forked repo.")
 			logging.error(e)
@@ -103,8 +113,8 @@ class forked_project():
 
 		
 		try: 
-			repo_forks_list, no_of_api_call = self.fetch_paginated_list(repo_forks)
-			logging.info("Total number of API Calls: {}".format(no_of_api_call))
+			repo_forks_list = self.fetch_paginated_list(repo_forks)
+			#logging.info("Total number of API Calls: {}".format(no_of_api_call))
 		
 		except Exception as e: 
 			logging.info("Error converting the paginated list to list")
@@ -188,6 +198,23 @@ class forked_project():
 			license_type = ''
 		return license_type
 
+	def sleep_check(self,no_of_api_call):
+		API_LIMIT = 20
+		TIME_LIMIT = 3600 #sec
+		
+		if self.cur_api_call+no_of_api_call >=API_LIMIT:
+			logging.info("================Sleeping for 60 Seconds============")
+			time.sleep(60)
+		else: 
+			self.cur_api_call += no_of_api_call 
+		cur_time = time.time()
+		diff_time =  cur_time  - self.start_time  
+
+		if diff_time >= TIME_LIMIT
+			self.start_time = time.time()
+			self.cur_api_call = 0   
+		
+
 	def go(self):
 		project_list = self.get_projects_from_source_table()
 		count = 0
@@ -198,8 +225,10 @@ class forked_project():
 			count += 1
 			logging.info("\n==================Processing Project #{}======================".format(count))
 
-			project_forks = self.get_forked_projects(project_url)
+			project_forks  = self.get_forked_projects(project_url)
 			num_of_forks_from_api = len(project_forks)
+
+			
 
 			if num_of_forks_from_db != num_of_forks_from_api:
 				logging.info("Difference in fork counts. \n From DB: {}\nFrom API: {}".format(num_of_forks_from_db,num_of_forks_from_api))
