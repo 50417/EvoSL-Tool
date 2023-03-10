@@ -177,7 +177,7 @@ class forked_project():
 			return: 
 				licensed_project_list : list of python dictionary containing project information
 		'''
-		PROJECTS_INFO_SQL = 'SELECT id, project_url,forks_count from Github_Projects where license != "" '
+		PROJECTS_INFO_SQL = 'SELECT file_id, project_url,forks_count from Github_Projects where license != "" '
 		licensed_project_list = self.run_SQL(PROJECTS_INFO_SQL)
 		return licensed_project_list
 
@@ -210,7 +210,7 @@ class forked_project():
 		cur_time = time.time()
 		diff_time =  cur_time  - self.start_time  
 
-		if diff_time >= TIME_LIMIT
+		if diff_time >= TIME_LIMIT:
 			self.start_time = time.time()
 			self.cur_api_call = 0   
 		
