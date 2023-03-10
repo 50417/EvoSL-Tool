@@ -108,6 +108,7 @@ class forked_project():
 		except Exception as e: 
 			logging.info("Error getting list of forked repo.")
 			logging.error(e)
+			return []
 
 		logging.info("Repo name : {}".format(repo))
 
