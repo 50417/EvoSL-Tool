@@ -11,7 +11,7 @@ class Project_commits_verbatim(Base):
 	model class for Simulink Repo Info
 	'''
 	__tablename__ = "Project_commits"
-	id = Column('id', Integer)
+	project_id = Column('project_id', Integer)
 	hash = Column('hash',String)
 	msg = Column('msg',String)
 	author_name = Column('author_name',String)
@@ -25,10 +25,10 @@ class Project_commits_verbatim(Base):
 	branches = Column('branches',Text)
 	in_main_branch = Column('in_main_branch',Boolean)
 	merge = Column('merge', Boolean)
-	#modifications = Column('modifications',Text)
+	modified_files = Column('modified_files',Text)
 	parents = Column('parents',Text)
-	project_name = Column('project_name',String)
-	project_path = Column('project_path', String)
+	#project_name = Column('project_name',String)
+	#project_path = Column('project_path', String)
 	deletions = Column('deletions',Integer)
 	insertions = Column('insertions', Integer)
 	lines = Column("lines", Integer)
@@ -38,13 +38,13 @@ class Project_commits_verbatim(Base):
 	dmm_unit_interfacing = Column("dmm_unit_interfacing", Float)
 	__table_args__ = (
 		PrimaryKeyConstraint(
-			id,
+			project_id,
 			hash),
 		{})
 
 
-	def __init__(self, id,commit_obj):
-		self.id = id
+	def __init__(self, project_id,commit_obj,modified_files):
+		self.project_id = project_id
 		self.hash = commit_obj.hash
 		self.msg = commit_obj.msg
 		self.author_name = commit_obj.author.name
@@ -59,10 +59,10 @@ class Project_commits_verbatim(Base):
 		self.in_main_branch = commit_obj.in_main_branch
 		self.merge = commit_obj.merge
 
-		#self.modifications = commit_obj.modifications
+		self.modified_files = modified_files
 		self.parents = str(commit_obj.parents)
-		self.project_name = commit_obj.project_name
-		self.project_path = commit_obj.project_path
+		#self.project_name = commit_obj.project_name
+		#self.project_path = commit_obj.project_path
 		self.deletions = commit_obj.deletions
 		self.insertions = commit_obj.insertions
 		self.lines = commit_obj.lines
@@ -79,14 +79,21 @@ class Project_commits_verbatim_Controller(object):
 	def __init__(self,db_name):
 		# In memory SQlite database . URI : sqlite:///:memory:
 		# URL = driver:///filename or memory
-		self.engine = create_engine('sqlite:///'+db_name, echo=True) 
+		self.engine = create_engine('sqlite:///'+db_name) 
 		#Create Tables
 		Base.metadata.create_all(bind=self.engine)
 		self.Session = sessionmaker(bind=self.engine)
 
-	def insert(self, id, commit_obj):
+	def insert(self, project_id, commit_obj, modified_files):
 		session = self.Session()
-		tmp_obj = Project_commits_verbatim( id, commit_obj)
+		tmp_obj = Project_commits_verbatim( project_id, commit_obj, modified_files)
 		session.add(tmp_obj)
+		session.commit()
+		session.close()
+
+	def delete(self, primary_key_id):
+		session = self.Session()
+		session.query(Project_commits_verbatim).filter(Project_commits_verbatim.project_id == primary_key_id).delete()
+
 		session.commit()
 		session.close()

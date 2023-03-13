@@ -11,7 +11,7 @@ class Model_commits_info(Base):
 	model class for Simulink Repo Info
 	'''
 	__tablename__ = "GitHub_Model_Commit_Info"
-	id = Column('id', Integer)
+	id = Column('project_id', Integer)
 	model_name =  Column('model_name', String)
 	total_number_of_commits = Column('Total_number_of_commits', Integer)
 	number_of_authors = Column('Number_of_authors', Integer)
@@ -41,7 +41,7 @@ class Model_commits_info_Controller(object):
 	def __init__(self,db_name):
 		# In memory SQlite database . URI : sqlite:///:memory:
 		# URL = driver:///filename or memory
-		self.engine = create_engine('sqlite:///'+db_name, echo=True) # Hard coded Database Name . TODO : Make it user configurable/
+		self.engine = create_engine('sqlite:///'+db_name) # Hard coded Database Name . TODO : Make it user configurable/
 		#Create Tables
 		Base.metadata.create_all(bind=self.engine)
 		self.Session = sessionmaker(bind=self.engine)
@@ -53,5 +53,12 @@ class Model_commits_info_Controller(object):
 		tmp_model_commits_info = Model_commits_info( id,model_name, total_number_of_commits, number_of_authors ,
 				 first_commit, last_commit, abs_lifeTime_in_days, rel_lifeTime)
 		session.add(tmp_model_commits_info)
+		session.commit()
+		session.close()
+
+	def delete(self, primary_key_id):
+		session = self.Session()
+		session.query(Model_commits_info).filter(Model_commits_info.id == primary_key_id).delete()
+
 		session.commit()
 		session.close()

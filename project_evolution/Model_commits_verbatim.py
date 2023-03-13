@@ -11,7 +11,7 @@ class Model_commits_verbatim(Base):
 	model class for Simulink Repo Info
 	'''
 	__tablename__ = "Model_commits"
-	id = Column('id', Integer)
+	project_id = Column('project_id', Integer)
 	model_name = Column('model_name', String)
 	hash = Column('hash',String)
 	msg = Column('msg',String)
@@ -26,27 +26,27 @@ class Model_commits_verbatim(Base):
 	branches = Column('branches',Text)
 	in_main_branch = Column('in_main_branch',Boolean)
 	merge = Column('merge', Boolean)
-	modified = Column('modifications',Boolean)
+	change_type = Column('change_type',Text)
 	parents = Column('parents',Text)
-	project_name = Column('project_name',String)
-	project_path = Column('project_path', String)
-	deletions = Column('deletions',Integer)
-	insertions = Column('insertions', Integer)
-	lines = Column("lines", Integer)
-	files = Column("files", Integer)
-	dmm_unit_size = Column("dmm_unit_size",Float)
-	dmm_unit_complexity = Column("dmm_unit_complexity", Float)
-	dmm_unit_interfacing = Column("dmm_unit_interfacing", Float)
+	#project_name = Column('project_name',String)
+	#project_path = Column('project_path', String)
+	#deletions = Column('deletions',Integer)
+	#insertions = Column('insertions', Integer)
+	#lines = Column("lines", Integer)
+	#files = Column("files", Integer)
+	#dmm_unit_size = Column("dmm_unit_size",Float)
+	#dmm_unit_complexity = Column("dmm_unit_complexity", Float)
+	#dmm_unit_interfacing = Column("dmm_unit_interfacing", Float)
 	__table_args__ = (
 		PrimaryKeyConstraint(
-			id,
+			project_id,
 			model_name,
 			hash),
 		{})
 
 
-	def __init__(self, id,model_name,commit_obj):
-		self.id = id
+	def __init__(self, project_id,model_name,commit_obj,change_type):
+		self.project_id = project_id
 		self.model_name = model_name
 		self.hash = commit_obj.hash
 		self.msg = commit_obj.msg
@@ -61,15 +61,15 @@ class Model_commits_verbatim(Base):
 		self.branches = str(commit_obj.branches)
 		self.in_main_branch = commit_obj.in_main_branch
 		self.merge = commit_obj.merge
-		modified = False
-		for obj in commit_obj.modifications:
-			if obj.old_path is not None and obj.new_path is not None and model_name.endswith(obj.new_path):
-				modified = True
+		#modified = False
+		#for obj in commit_obj.modifications:
+			#if obj.old_path is not None and obj.new_path is not None and model_name.endswith(obj.new_path):
+				#modified = True
 
-		self.modified = modified
+		self.change_type = change_type
 		#self.modifications = commit_obj.modifications
 		self.parents = str(commit_obj.parents)
-		self.project_name = commit_obj.project_name
+		'''self.project_name = commit_obj.project_name
 		self.project_path = commit_obj.project_path
 		self.deletions = commit_obj.deletions
 		self.insertions = commit_obj.insertions
@@ -78,7 +78,7 @@ class Model_commits_verbatim(Base):
 		self.dmm_unit_size = commit_obj.dmm_unit_size
 		self.dmm_unit_complexity = commit_obj.dmm_unit_complexity
 		self.dmm_unit_interfacing = commit_obj.dmm_unit_interfacing
-
+		'''
 
 
 
@@ -87,14 +87,21 @@ class Model_commits_verbatim_Controller(object):
 	def __init__(self,db_name):
 		# In memory SQlite database . URI : sqlite:///:memory:
 		# URL = driver:///filename or memory
-		self.engine = create_engine('sqlite:///'+db_name, echo=True) # Hard coded Database Name . TODO : Make it user configurable/
+		self.engine = create_engine('sqlite:///'+db_name) # Hard coded Database Name . TODO : Make it user configurable/
 		#Create Tables
 		Base.metadata.create_all(bind=self.engine)
 		self.Session = sessionmaker(bind=self.engine)
 
-	def insert(self, id, model_name, commit_obj):
+	def insert(self, project_id, model_name, commit_obj,change_type):
 		session = self.Session()
-		tmp_obj = Model_commits_verbatim( id, model_name,commit_obj)
+		tmp_obj = Model_commits_verbatim( project_id, model_name,commit_obj,change_type)
 		session.add(tmp_obj)
+		session.commit()
+		session.close()
+
+	def delete(self, primary_key_id):
+		session = self.Session()
+		session.query(Model_commits_verbatim).filter(Model_commits_verbatim.project_id == primary_key_id).delete()
+
 		session.commit()
 		session.close()

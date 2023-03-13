@@ -7,7 +7,32 @@ logging.basicConfig(filename='commits.log', filemode='a',
 					level=logging.INFO)
 
 #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-def get_project_level_commits(repo_url,hash,project_verbatim,id):
+
+def get_changed_files(modified_files_obj, commit , model_verbatim, project_id):
+    file_change_list = []
+    logging.debug("+++MODIFIED FILE LIST+++")
+    for modified_file_obj in modified_files_obj:
+        file_path = ''
+        logging.debug("Name: {} ChangeType: {} OldPath: {} NewPath: {}".format(modified_file_obj.filename,modified_file_obj.change_type.name,modified_file_obj.old_path,modified_file_obj.new_path))
+        if modified_file_obj.old_path is None: 
+            file_path = modified_file_obj.new_path
+        else:
+            file_path = modified_file_obj.old_path
+        file_change_list.append(file_path)
+
+        # Models 
+        if file_path.endswith('.mdl') or file_path.endswith('.slx'):
+            try: 
+                model_verbatim.insert(project_id, file_path, commit, modified_file_obj.change_type.name )
+            except Exception as e:
+                logging.error("Error inserting into database")
+                logging.error(e) 
+
+    logging.debug("+++MODIFIED FILE LIST END+++")
+    return ",".join(file_change_list)
+
+
+def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
     hashes_per_project = []
     commits_dates_per_project = []
     merge_commits_per_project = set()
@@ -16,7 +41,13 @@ def get_project_level_commits(repo_url,hash,project_verbatim,id):
     model_commits = []
     model_authors = set()
     for commit in RepositoryMining(repo_url,to_commit=hash).traverse_commits():
-        project_verbatim.insert(id,commit)
+        modified_files = get_changed_files(commit.modifications, commit, model_verbatim,id)
+        try: 
+            project_verbatim.insert(id,commit,modified_files)
+        except Exception as e:
+            logging.error("Error inserting into database")
+            logging.error(e) 
+
         hashes_per_project.append(commit.hash)
         authors_per_project.add(commit.author.email)
         commits_dates_per_project.append(commit.author_date.astimezone())
