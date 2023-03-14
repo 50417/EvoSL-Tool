@@ -9,6 +9,7 @@ logging.basicConfig(filename='commits.log', filemode='a',
 #logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 def get_changed_files(modified_files_obj, commit , model_verbatim, project_id):
+    CONTAINS_MODEL_FLAG = False
     file_change_list = []
     logging.debug("+++MODIFIED FILE LIST+++")
     for modified_file_obj in modified_files_obj:
@@ -22,6 +23,7 @@ def get_changed_files(modified_files_obj, commit , model_verbatim, project_id):
 
         # Models 
         if file_path.endswith('.mdl') or file_path.endswith('.slx'):
+            CONTAINS_MODEL_FLAG = True
             try: 
                 model_verbatim.insert(project_id, file_path, commit, modified_file_obj.change_type.name )
             except Exception as e:
@@ -29,7 +31,7 @@ def get_changed_files(modified_files_obj, commit , model_verbatim, project_id):
                 logging.error(e) 
 
     logging.debug("+++MODIFIED FILE LIST END+++")
-    return ",".join(file_change_list)
+    return ",".join(file_change_list), CONTAINS_MODEL_FLAG
 
 
 def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
@@ -41,12 +43,15 @@ def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
     model_commits = []
     model_authors = set()
     for commit in RepositoryMining(repo_url,to_commit=hash).traverse_commits():
-        modified_files = get_changed_files(commit.modifications, commit, model_verbatim,id)
+        modified_files, CONTAINS_MODEL_FLAG = get_changed_files(commit.modifications, commit, model_verbatim,id)
         try: 
             project_verbatim.insert(id,commit,modified_files)
         except Exception as e:
             logging.error("Error inserting into database")
             logging.error(e) 
+        if CONTAINS_MODEL_FLAG:
+            model_commits.append(commit.hash)
+            model_authors.add( commit.author.email)
 
         hashes_per_project.append(commit.hash)
         authors_per_project.add(commit.author.email)
@@ -76,10 +81,6 @@ def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
         commit_per_day_sum += no_of_commit
     #logging.info(commit_per_day_sum/(float(project_lifetime.days)))
 
-    #model
-    for commit in RepositoryMining(repo_url,only_modifications_with_file_types=['.slx','.mdl']).traverse_commits():
-        model_commits.append(commit.hash)
-        model_authors.add( commit.author.email)
     logging.info("Number of Model Commits :{}".format(len(model_commits)))
     logging.info("Number of Model Authors :{}".format(len(model_authors)))
     cpds = commit_per_day_sum
