@@ -66,7 +66,7 @@ class GithubRepoDownload():
 	def get_version_sha(self,repo):
 		repoLink = GithubRepoDownload.githubURL + "/" + \
 							 repo.owner.login + "/" + repo.name + ".git"
-		p = Popen(['git', 'ls-remote', repoLink, '|', 'grep', 'refs/heads/master'], stdout=PIPE)
+		p = Popen(['git', 'ls-remote', repoLink, '|', 'grep', 'HEAD'], stdout=PIPE)
 		output = p.communicate()[0].decode("utf-8")
 		return output.split("\t")[0]
 
