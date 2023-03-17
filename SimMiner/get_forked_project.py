@@ -1,14 +1,15 @@
 import logging
 import argparse
-import os
+import os,sys
+sys.path.append('./DAO')
 import sqlite3
 from sqlite3 import Error
 from subprocess import Popen, PIPE
 import shutil
 import time
 from github import Github , GithubException
-from Simulinkforkedrepoinfo import SimulinkForkedRepoInfoController
-logging.basicConfig(filename='github_forked.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+from ForkedRepo_DAO import SimulinkForkedRepoInfoController
+logging.basicConfig(filename='logs/github_forked.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 					level=logging.INFO)
 logging.getLogger().setLevel(logging.INFO)
 
