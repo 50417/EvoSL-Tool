@@ -6,18 +6,19 @@ from github import Github , GithubException
 import argparse
 # import urllib.request as urllib2
 import requests
-import os
+import os, sys
 from pathlib import Path
 from zipfile import ZipFile
 import datetime
 import logging
-from Simulinkrepoinfo import SimulinkRepoInfoController
+sys.path.append('./DAO')
+from Repo_DAO import SimulinkRepoInfoController
 import sys
 import time
 import shutil
 from subprocess import Popen, PIPE
 import pytz  
-logging.basicConfig(filename='github.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+logging.basicConfig(filename='logs/repo_github.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 					level=logging.INFO)
 
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
@@ -190,6 +191,8 @@ class GithubRepoDownload():
 						logging.info("Error inserting into database")
 						logging.info(e)
 					self.download_counter += 1
+					projectname = os.path.basename(destination_path)
+					cached_no_sim_mdl_project.write(","+projectname)
 				else:
 					self.skipped_counter_no_mdl += 1
 					projectname = os.path.basename(destination_path)
@@ -217,6 +220,7 @@ class GithubRepoDownload():
 					fileName_csv=filename+","+fileName_csv
 		if count > 0:
 			self.simulinkmodels_count[projectname] = count
+			#Uncomment this if you want to store the repo locally. May require large storage.
 			shutil.rmtree(folder,ignore_errors=True)
 			#self.update_model_file_info_in_db(repo.id,{"model_files":fileName_csv})
 			#self.update_model_file_info_in_db(repo.id, {"has_model_files":1})
