@@ -7,7 +7,7 @@ from sqlite3 import Error
 from subprocess import Popen, PIPE
 import shutil
 import time
-from github import Github , GithubException
+from github import Github , GithubException,RateLimitExceededException
 from ForkedRepo_DAO import SimulinkForkedRepoInfoController
 logging.basicConfig(filename='logs/github_forked.log', filemode='a', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 					level=logging.INFO)
@@ -37,12 +37,23 @@ class forked_project():
 		self.start_time = time.time()
 
 	def run_SQL(self, sql):
-	    cur = self.read_conn.cursor()
-	    cur.execute(sql)
-	    rows = cur.fetchall()
-	    results = [{"project_id":r[0], "url":r[1], "fork_count": r[2]} for r in rows]
+		cur = self.read_conn.cursor()
+		cur.execute(sql)
+		rows = cur.fetchall()
+		results = [{"project_id":r[0], "url":r[1], "fork_count": r[2]} for r in rows]
 
-	    return results
+		return results
+
+	def get_processed_project_id(self):
+		sql = 'SELECT DISTINCT forked_from_id FROM Github_Forked_Projects'
+		cur = self.read_conn.cursor()
+		cur.execute(sql)
+		rows = cur.fetchall()
+		results = [r[0] for r in rows]
+
+		return results
+
+
 
 	def get_version_sha(self,repo):
 		repoLink =self.common_url + \
@@ -70,7 +81,7 @@ class forked_project():
 			# Retry loading page 
 			while len(result) < min((page+1) * page_size, all_pages.totalCount):
 				#num_api_call += 1
-				self.sleep_check(1)
+				#self.sleep_check(1)
 				# if required due to weird condition: https://github.com/PyGithub/PyGithub/blob/001970d4a828017f704f6744a5775b4207a6523c/github/PaginatedList.py#L242
 				elements = all_pages.get_page(-1 if page == 0 else page)
 				if len(elements) == page_size or page == pages-1 and len(elements) == all_pages.totalCount % page_size:
@@ -78,18 +89,18 @@ class forked_project():
 		return result
 
 	def create_connection(self, db_file):
-	    """ create a database connection to the SQLite database
-	        specified by the db_file
-	    :param db_file: database file
-	    :return: Connection object or None
-	    """
-	    conn = None
-	    try:
-	        conn = sqlite3.connect(db_file)
-	    except Error as e:
-	        logging.error(e)
+		""" create a database connection to the SQLite database
+			specified by the db_file
+		:param db_file: database file
+		:return: Connection object or None
+		"""
+		conn = None
+		try:
+			conn = sqlite3.connect(db_file)
+		except Error as e:
+			logging.error(e)
 
-	    return conn
+		return conn
 
 	def get_forked_projects(self,project_url):
 		'''
@@ -102,10 +113,12 @@ class forked_project():
 		project_name = project_url.replace(self.common_url,"")
 
 		repo = self.pygithub.get_repo(project_name)
-		self.sleep_check(1)
+		#self.sleep_check(1)
 		try: 
 			repo_forks = repo.get_forks()
-			self.sleep_check(1)
+			#self.sleep_check(1)
+		except RateLimitExceededException as e:
+			raise(RateLimitExceededException)
 		except Exception as e: 
 			logging.info("Error getting list of forked repo.")
 			logging.error(e)
@@ -166,7 +179,7 @@ class forked_project():
 									repo.created_at, repo.updated_at, repo.pushed_at,
 									repo.homepage, repo.size,
 									repo.stargazers_count, repo.subscribers_count, languages,repo.forks_count,
-			   						repo.open_issues_count, repo.master_branch, repo.default_branch,
+									repo.open_issues_count, repo.master_branch, repo.default_branch,
 									topic,license_type,version_sha)
 		except Exception as e: 
 			logging.info("Writing to database failed")
@@ -191,6 +204,12 @@ class forked_project():
 		to_delete_folder = self.dir_name + "/" + str(project_id)
 		shutil.rmtree(to_delete_folder,ignore_errors=True)
 
+	def delete_forked_from_id(self, forked_from_id):
+		'''
+			Delete all projects information from database 
+		'''
+		self.databaseHandler.delete_original_id(forked_from_id)
+
 	def get_license(self,repo):
 		try:
 			license_type = repo.get_license().license.name	
@@ -199,35 +218,30 @@ class forked_project():
 			logging.error(e)
 			license_type = ''
 		return license_type
-
-	def sleep_check(self,no_of_api_call):
-		API_LIMIT = 20
-		TIME_LIMIT = 3600 #sec
-		
-		if self.cur_api_call+no_of_api_call >=API_LIMIT:
-			logging.info("================Sleeping for 60 Seconds============")
-			time.sleep(60)
-		else: 
-			self.cur_api_call += no_of_api_call 
-		cur_time = time.time()
-		diff_time =  cur_time  - self.start_time  
-
-		if diff_time >= TIME_LIMIT:
-			self.start_time = time.time()
-			self.cur_api_call = 0   
 		
 
 	def go(self):
 		project_list = self.get_projects_from_source_table()
+		processed_project_id = self.get_processed_project_id()
+
 		count = 0
 		for project in project_list:
 			project_id = project['project_id']
 			project_url = project['url']
 			num_of_forks_from_db = project['fork_count']
+
+			if project_id in processed_project_id:
+				continue
+
+
 			count += 1
 			logging.info("\n==================Processing Project #{}======================".format(count))
-
-			project_forks  = self.get_forked_projects(project_url)
+			try:
+				project_forks  = self.get_forked_projects(project_url)
+			except RateLimitExceededException as e:
+				logging.info("=================Sleeping 1 hour==============")
+				time.sleep(3600)
+				project_forks = self.get_forked_projects(project_url)
 			num_of_forks_from_api = len(project_forks)
 
 			
@@ -242,9 +256,15 @@ class forked_project():
 
 				#First checks if the database contains the project. 
 				#If exists, it is assumed that the project is already downloaded and cloning is skipped
-
-				version_sha =  self.get_version_sha(project_fork)
-				license_type = self.get_license(project_fork)
+				try: 
+					version_sha =  self.get_version_sha(project_fork)
+					license_type = self.get_license(project_fork)
+				except RateLimitExceededException as e:
+					self.delete_forked_from_id(project_id)
+					logging.info("=================Sleeping 1 hour==============")
+					time.sleep(3600)
+					self.go()
+					return 
 
 				write_success = self.write_to_database(project_id,project_fork,license_type,version_sha)
 				if write_success:

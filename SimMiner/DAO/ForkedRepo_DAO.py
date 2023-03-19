@@ -99,7 +99,7 @@ class SimulinkForkedRepoInfoController(object):
 	def __init__(self,db_name):
 		# In memory SQlite database . URI : sqlite:///:memory:
 		# URL = driver:///filename or memory
-		self.engine = create_engine('sqlite:///'+db_name+'.sqlite', echo=True) # Hard coded Database Name . TODO : Make it user configurable/
+		self.engine = create_engine('sqlite:///'+db_name+'.sqlite') # Hard coded Database Name . TODO : Make it user configurable/
 		#Create Tables
 		Base.metadata.create_all(bind=self.engine)
 		
@@ -161,6 +161,13 @@ class SimulinkForkedRepoInfoController(object):
 	def delete(self, primary_key_id):
 		session = self.Session()
 		session.query(SimulinkForkedRepoInfo).filter(SimulinkForkedRepoInfo.id == primary_key_id).delete()
+
+		session.commit()
+		session.close()
+
+	def delete_original_id(self, forked_from_id):
+		session = self.Session()
+		session.query(SimulinkForkedRepoInfo).filter(SimulinkForkedRepoInfo.forked_from_id == forked_from_id).delete()
 
 		session.commit()
 		session.close()
