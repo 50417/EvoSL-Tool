@@ -2,7 +2,7 @@ function git_checkout_commit(obj,commit_sha,project_loc)
 %GIT_CHECKOUT_COMMIT Summary of this function goes here
 %   Detailed explanation goes here
  cur_dir = pwd;
- checkout_cmd = ['git checkout ' commit_sha];
+ checkout_cmd = strcat("git checkout -f " ,commit_sha);
  obj.WriteLog(sprintf("Checking out in %s: %s",project_loc,commit_sha));
  
  cd(project_loc);

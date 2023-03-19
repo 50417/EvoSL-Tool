@@ -6,11 +6,11 @@ function [child_parent_version_sha,project_id] = get_project_commit_hashes(obj,p
     project_id_sql = strcat('select file_id from github_projects where project_url = "',project_url,'"');
     obj.WriteLog(strcat("SQL Project ID : ",project_id_sql));
     results = fetch(conn,project_id_sql);
-    if length(results) ~= 1
+    if width(results) ~= 1
         obj.WriteLog(strcat("Error finding ",project_url," in ",obj.project_commit_db));
         error(["Error finding " project_url " in " obj.project_commit_db]);
     end
-    project_id = results{1};
+    project_id = results{1,1};
     
      obj.WriteLog(strcat("Resultant Project ID : ",int2str(project_id)));
     
