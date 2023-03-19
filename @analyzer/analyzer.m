@@ -48,7 +48,8 @@ classdef analyzer
         %
         WriteLog(obj,Data);
         
-        %Replication and plots
+        %plots and results 
+        
         %ChangeType and counts
         nodeandchangetype_count_map = get_nodeandchangetype_count_map(obj);
         res_vector = get_vector_per_node_type(obj, node_type,nodeandchangetype_count_map);
@@ -63,7 +64,7 @@ classdef analyzer
         
         %bubbble chart category change
         [category, category_change_percent] = get_blocktype_blockpath_count(obj);
-        replicate_plots_and_results(obj);
+        plot_and_print_results(obj);
         
         %Documentation Changes
         [doc_changes,doc_type] = get_documentation_changes_percent(obj);

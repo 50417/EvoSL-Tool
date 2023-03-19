@@ -1,4 +1,4 @@
-function replicate_plots_and_results(obj)
+function plot_and_print_results(obj)
     nodeandchangetype_count_map = obj.get_nodeandchangetype_count_map();
     node_type = {'block','line','port','mask','annotation','configuration'};
     change_type = {'Renamed','Modified','Deleted','Added'};
