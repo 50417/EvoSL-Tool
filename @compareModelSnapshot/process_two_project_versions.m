@@ -21,7 +21,7 @@ function process_two_project_versions(obj,project_before, project_after,project_
     
     for i = 1:numel(list_of_diff_files)%1numel(all_models)
         
-        if ~isempty(processed_project_model_commits) & sum(ismember(processed_project_model_commits,strcat(project_before_sha,"_",...
+        if ~isempty(processed_project_model_commits) && sum(ismember(processed_project_model_commits,strcat(int2str(obj.project_id),"_",project_before_sha,"_",...
                 project_after_sha,"_",list_of_diff_files{i})))>0
             obj.WriteLog(sprintf("Already processed %s",list_of_diff_files{i}));
             continue;
@@ -32,7 +32,7 @@ function process_two_project_versions(obj,project_before, project_after,project_
         potential_model_project_after = fullfile(project_after,list_of_diff_files{i});
         
         
-        if isfile(potential_model_project_after) & isfile(potential_model_project_before)
+        if isfile(potential_model_project_after) && isfile(potential_model_project_before)
             obj.WriteLog(sprintf('Comparing %s',list_of_diff_files{i}));
         elseif ~isfile(potential_model_project_before)
             potential_model_project_before = 'blank';
@@ -43,7 +43,7 @@ function process_two_project_versions(obj,project_before, project_after,project_
         end
         try
             %1obj.WriteLog(sprintf('Comparing %s',all_models(i)));
-            obj.WriteLog(sprintf('Comparing %s',list_of_diff_files{i}));
+            obj.WriteLog(sprintf('Comparing %s (twice prints mean this is not a new file added/deleted)',list_of_diff_files{i}));
             comparison_res = obj.compare_two_models(potential_model_project_before,potential_model_project_after);
         catch ME
             obj.WriteLog(sprintf('ERROR Comparing models snapshot '));                    

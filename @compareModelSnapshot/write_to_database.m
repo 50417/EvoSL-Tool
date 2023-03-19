@@ -1,4 +1,4 @@
- function output_bol = write_to_database(obj,before_sha, after_sha, model,comparison_res_table)
+ function output_bol = write_to_database(obj, before_sha, after_sha, model,comparison_res_table)
 
             [rows,~] = size(comparison_res_table);
             for r = 1:rows
@@ -37,7 +37,7 @@
                 
                 end
                 insert(obj.conn,obj.table_name,obj.colnames, ...
-                                {before_sha, after_sha, char(model), ...
+                                {obj.project_id,before_sha, after_sha, char(model), ...
                                 block_path, node_type, block_type, ...
                                is_deleted, is_modified, is_added, is_renamed }); 
                
