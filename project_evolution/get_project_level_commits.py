@@ -42,7 +42,7 @@ def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
     commit_per_day = {}
     model_commits = []
     model_authors = set()
-    for commit in RepositoryMining(repo_url,to_commit=hash).traverse_commits():
+    for commit in RepositoryMining(repo_url).traverse_commits():
         modified_files, CONTAINS_MODEL_FLAG = get_changed_files(commit.modifications, commit, model_verbatim,id)
         try: 
             project_verbatim.insert(id,commit,modified_files)

@@ -8,6 +8,11 @@ import time
 from datetime import datetime
 from pydriller import GitRepository
 
+sys.path.insert(1, '../SimMiner/DAO')
+from subprocess import Popen, PIPE
+
+from Repo_DAO import SimulinkRepoInfoController
+
 from Model_commits_info import Model_commits_info_Controller
 from Project_commits_info import Project_commits_info_Controller
 from Project_commits_verbatim import Project_commits_verbatim_Controller
@@ -41,7 +46,7 @@ def get_repo_id_urls(conn):
     :return:
     """
     cur = conn.cursor()
-    cur.execute("SELECT file_id,project_url,model_files,version_sha FROM GitHub_Projects ")
+    cur.execute("SELECT file_id,project_url,model_files,version_sha FROM GitHub_Projects")
 
     rows = cur.fetchall()
     return rows
@@ -118,7 +123,10 @@ def check_and_delete(project_id , conn, pv, mv, pdc, mdc):
             pdc.delete(project_id)
             mdc.delete(project_id)
 
-
+def get_most_recent_hash(url):
+    p = Popen(['git', 'ls-remote', url, '|', 'grep', 'HEAD'], stdout=PIPE)
+    output = p.communicate()[0].decode("utf-8")
+    return output.split("\t")[0]
 def main():
     start = time.time()
     # Source and Destination can be same database
@@ -135,6 +143,9 @@ def main():
     conn = create_connection(source_database)
     dst_conn = create_connection(dst_database)
 
+    to_update_version_sha = dst_database.replace('.sqlite','')
+    databaseHandler = SimulinkRepoInfoController(to_update_version_sha)
+
     with dst_conn:
         processed_id,processed_mdl_name= get_id_name(dst_conn)
     with conn:
@@ -143,13 +154,19 @@ def main():
             id, url , model_files,hash = id_url
             if not os.path.exists(path):
                 os.mkdir(path)
-            try:
+            try:             
                 if id not in processed_id:
                     logging.info("=============Processing {}===========".format(str(id)))
                     clone = "git clone " + url + " " + path
                     os.system(clone)  # Cloning
-                    gr = GitRepository(path)
-                    gr.checkout(hash)
+                    recent_hash = get_most_recent_hash(url)
+
+                    if hash == '' or recent_hash != hash:
+                        hash = recent_hash
+                        databaseHandler.update(id,{"version_sha":recent_hash})                    
+
+                    #gr = GitRepository(path)
+                    #gr.checkout(hash)
                     url = path
                     project_lifetime = write_project_commit_info(url,id, hash,dest_project_database_controller,project_verbatim, model_verbatim)
                     if project_lifetime != -1:
