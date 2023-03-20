@@ -20,7 +20,9 @@ function process_two_project_versions(obj,project_before, project_after,project_
    
     
     for i = 1:numel(list_of_diff_files)%1numel(all_models)
-        
+        if ~(endsWith(list_of_diff_files{i},".mdl") || endsWith(list_of_diff_files{i},".slx"))
+            continue;
+        end
         if ~isempty(processed_project_model_commits) && sum(ismember(processed_project_model_commits,strcat(int2str(obj.project_id),"_",project_before_sha,"_",...
                 project_after_sha,"_",list_of_diff_files{i})))>0
             obj.WriteLog(sprintf("Already processed %s",list_of_diff_files{i}));
