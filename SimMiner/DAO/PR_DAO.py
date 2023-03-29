@@ -28,7 +28,7 @@ class PR_DAO(Base):
 	user_url = Column('user_url', String)
 
 	created_at = Column('created_at', DateTime)
-	closed_at = Column('updated_at', DateTime)
+	closed_at = Column('closed_at', DateTime)
 
 	__table_args__ = (
 		PrimaryKeyConstraint(

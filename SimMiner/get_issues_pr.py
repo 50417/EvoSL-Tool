@@ -77,9 +77,8 @@ class Issues_PR():
 					self.issueDBHandler.insert(project_id, labels, issue)
 					x = 0 
 				except Exception as e:
-					print('Issue_Not_OK')
-					#logging.error("Error inserting into database")
-					#logging.error(e) 
+					logging.error("Error inserting into database")
+					logging.error(e) 
 
 
 				# Adding Comments 
@@ -88,9 +87,8 @@ class Issues_PR():
 					try:
 						self.commentDBHandler.insert(issue.id, 'Issue', comment)
 					except Exception as e:
-						print('Issue_comment_not_OK')
-						#logging.error("Error inserting into database")
-						#logging.error(e) 
+						logging.error("Error inserting into database")
+						logging.error(e) 
 
 				timeline_events = issue.get_timeline()
 	
@@ -102,9 +100,8 @@ class Issues_PR():
 							try:
 								self.linkDBHandler.insert(pull_request_id,issue.id)
 							except Exception as e:
-								print('Link Not OK')
-								#logging.error("Error inserting into database")
-								#logging.error(e) 
+								logging.error("Error inserting into database")
+								logging.error(e) 
 
 
 	def get_and_store_proj_pr(self,project_url, project_id):
@@ -120,9 +117,8 @@ class Issues_PR():
 			try: 
 				self.prDBHandler.insert(project_id, labels, repo_pr)
 			except Exception as e:
-				print('PR not OK')
-				#logging.error("Error inserting into database")
-				#logging.error(e) 
+				logging.error("Error inserting into database")
+				logging.error(e) 
 
 
 			# Adding Comments 
@@ -131,9 +127,8 @@ class Issues_PR():
 				try:
 					self.commentDBHandler.insert(repo_pr.id, 'PR', comment)
 				except Exception as e:
-					print('PR comment not OK')
-					#logging.error("Error inserting into database")
-					#logging.error(e) 
+					logging.error("Error inserting into database")
+					logging.error(e) 
 
 
 			#Adding commit
@@ -142,9 +137,8 @@ class Issues_PR():
 				try:
 					self.commitDBHandler.insert(repo_pr.id,commit)
 				except Exception as e:
-						print('Commit not OK')
-						#logging.error("Error inserting into database")
-						#logging.error(e) 
+						logging.error("Error inserting into database")
+						logging.error(e) 
 
 
 	def go(self,project_url, project_id):
