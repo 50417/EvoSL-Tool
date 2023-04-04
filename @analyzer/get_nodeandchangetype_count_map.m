@@ -21,7 +21,7 @@ function [nodeandchangetype_count_map] = get_nodeandchangetype_count_map(obj)
         for r = 1:rows
             node_type = result{r,1};
             change_type = result{r,2};
-            map_key = [node_type '_' change_type];
+            map_key = [char(node_type) '_' char(change_type)];
             total_count = result{r,3};
             nodeandchangetype_count_map(map_key) = total_count;
         end

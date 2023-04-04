@@ -3,7 +3,7 @@ classdef analyzer
     %   Detailed explanation goes here
     
     properties
-        model_evol_db = '';% update this database with model_evol sqlite db
+        model_evol_db = '/home/sohil/Downloads/EvolPaper/SLNETEvol_test.sqlite';% update this database with model_evol sqlite db
         
         table_name;
         conn;
@@ -16,7 +16,7 @@ classdef analyzer
             %ANALYZER Construct an instance of this class
             %   Detailed explanation goes here
             obj.conn = utils.connect_db(obj.model_evol_db);
-            obj.table_name = "Model_Evolution";
+            obj.table_name = "";
             obj.logfilename = strcat('analyzer_log',datestr(now, 'dd-mm-yy-HH-MM-SS'),'.txt');
 
             obj.WriteLog('open');
@@ -43,6 +43,10 @@ classdef analyzer
             end
             obj.blk_category_map('Structural').add('Reference');
              obj.blk_category_map('Trigger').add('ActionPort');
+             overlaped = utils.does_map_contain_overlaped_values(obj.blk_category_map);
+             if overlaped
+                 error("Block Category map contain overlaped values.")
+             end
             
         end
         %

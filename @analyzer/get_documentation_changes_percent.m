@@ -32,7 +32,7 @@ function [doc_changes_percent,doc_type] = get_documentation_changes_percent(obj)
      total_cnt = annotation_cnt + docBlock_cnt + mdlinfo_cnt;
      total_cnt = cast(total_cnt,"double");
      doc_changes_percent(1,1) = round(double(annotation_cnt)/double(total_cnt)*100,2);
-     doc_changes_percent(1,2) = round(double(docBlock_cnt)/double(total_cnt)*100,2);
-     doc_changes_percent(1,3) = round(double(mdlinfo_cnt)/double(total_cnt)*100,2);
+     doc_changes_percent(1,2) = round((double(docBlock_cnt)/double(total_cnt))*100,2);
+     doc_changes_percent(1,3) = round((double(mdlinfo_cnt)/double(total_cnt))*100,2);
 end
 

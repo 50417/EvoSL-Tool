@@ -41,7 +41,7 @@ function [blocktype_changetype,median_of_change] = get_x_quartile_block_change_p
             % TODO: Remove hardcoded 583 model commits and get from database
             median_adj_val = utils.get_adjusted_quartile(sorted_values,total_num_of_model_commits,x);
             if median_adj_val > 0
-                blockandchangeType = [result{start_idx,3} ' ' result{start_idx,4}];
+                blockandchangeType = [char(result{start_idx,3}) ' ' char(result{start_idx,4})];
                 blocktype_changetype{1,idx_counter} = blockandchangeType;
 
                 median_of_change(1,idx_counter) = median_adj_val;
