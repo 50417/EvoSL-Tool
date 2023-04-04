@@ -2,6 +2,7 @@ function print_map(map_obj)
 %PRINT_MAP Summary of this function goes here
 %   Detailed explanation goes here
 k = keys(map_obj); 
+disp(length(k));
 for i = 1:length(k)
 disp("=======================================");
 disp(k{i});

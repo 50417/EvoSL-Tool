@@ -54,6 +54,13 @@ function [category] = get_category(blk_type,lib_or_blk_path,constructor_flag,var
                     category = 'Structural';
               
                 end
+            case 'Matrix Operations'
+                category = potential_category; 
+                 if strcmp(blk_type,'SubSystem') 
+                    category = 'Structural';
+              
+                end
+
                 
             case 'Logic and Bit Operations'
                 category = 'Logic';
