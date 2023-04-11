@@ -9,7 +9,7 @@ class SimulinkForkedRepoInfo(Base):
 	'''
 	model class for Simulink Repo Info
 	'''
-	__tablename__ = "GitHub_Forked_Projects"
+	__tablename__ = "Forked_Projects"
 
 	id = Column('project_id', Integer, primary_key=True)
 	forked_from_id = Column('forked_from_id', Integer)

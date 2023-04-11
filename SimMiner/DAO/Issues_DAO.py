@@ -10,7 +10,7 @@ class Issues_DAO(Base):
 	'''
 	Data Access Object
 	'''
-	__tablename__ = "GitHub_Issues"
+	__tablename__ = "Issues"
 
 	project_id = Column('project_id', Integer)
 	issue_id = Column('issue_id', Integer)

@@ -10,7 +10,7 @@ class Commit_DAO(Base):
 	'''
 	Pull Request Data Access Object
 	'''
-	__tablename__ = "GitHub_PR_Commits"
+	__tablename__ = "PR_Commits"
 
 	pr_id = Column('pr_id', Integer)
 	commit_sha = Column('commit_sha', String)

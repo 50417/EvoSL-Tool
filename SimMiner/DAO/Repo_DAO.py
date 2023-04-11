@@ -9,7 +9,7 @@ class SimulinkRepoInfo(Base):
 	'''
 	model class for Simulink Repo Info
 	'''
-	__tablename__ = "GitHub_Projects"
+	__tablename__ = "Root_Projects"
 
 	id = Column('file_id', Integer, primary_key=True)
 	repo_name = Column('repo_name', String)

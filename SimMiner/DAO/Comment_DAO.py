@@ -10,7 +10,7 @@ class Comments_DAO(Base):
 	'''
 	Pull Request Data Access Object
 	'''
-	__tablename__ = "GitHub_Issue_PR_Comments"
+	__tablename__ = "Issue_PR_Comments"
 
 	issue_or_pr_id = Column('issue_pr_id', String)
 	comment_id = Column('comment_id', Integer)

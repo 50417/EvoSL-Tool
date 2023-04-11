@@ -10,7 +10,7 @@ class Issue_PR_Link_DAO(Base):
 	'''
 	Pull Request Data Access Object
 	'''
-	__tablename__ = "GitHub_Issue_PR_Link"
+	__tablename__ = "Issue_PR_Links"
 
 	pr_id = Column('pr_id', Integer)
 	issue_id = Column('issue_id', Integer)

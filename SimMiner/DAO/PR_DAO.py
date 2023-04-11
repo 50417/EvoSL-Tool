@@ -10,7 +10,7 @@ class PR_DAO(Base):
 	'''
 	Pull Request Data Access Object
 	'''
-	__tablename__ = "GitHub_PR"
+	__tablename__ = "PR"
 
 	project_id = Column('project_id', Integer)
 	pull_id = Column('pr_id', Integer)
