@@ -3,7 +3,6 @@
 ````
 -----------------------------------------------------------------------------------------------------
 MATLAB Version: 9.13.0.2193358 (R2022b) Update 5
-MATLAB License Number: 852709
 Operating System: Linux 5.4.0-84-generic #94~18.04.1-Ubuntu SMP Thu Aug 26 23:17:46 UTC 2021 x86_64
 Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
 -----------------------------------------------------------------------------------------------------
