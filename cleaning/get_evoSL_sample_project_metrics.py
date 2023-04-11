@@ -36,7 +36,7 @@ def get_project_ids(conn,table):
 
 def domain(conn, ids):
 	
-	sql = "SELECT description, topics from github_projects where file_id in ("+ids+")"
+	sql = "SELECT description, topics from github_projects where project_id in ("+ids+")"
 	print(sql)	
 
 def get_avg_block_size(conn,all_ids):
@@ -79,7 +79,7 @@ def calculate_quartiles(list_of_vals, lifetime=False):
            "\t&"+str(round(median,2))+"\t&"+str(round(stdev(list_of_vals),2))
 
 def get_commit_metadata(conn,metadata,all_ids ):
-	sql = "SELECT "+metadata+" from Github_projects_commit_info WHERE project_id in ("+all_ids+")"
+	sql = "SELECT "+metadata+" from Project_Commit_Summary WHERE project_id in ("+all_ids+")"
 	cur = conn.cursor()
 	cur.execute(sql)
 
@@ -98,10 +98,12 @@ def get_unique_model_file_analyzed(conn,table, all_ids):
 
 
 def main():
+	#EvoSL Sample DB
 	db = ""
 	conn = create_connection(db)
 
-	dst_table =""
+	ele_change_table = "Model_Element_Changes"
+	dst_table ="Github_models"
 	proj_ids = get_project_ids(conn, dst_table)
 	all_ids  = ",".join([str(proj) for proj in proj_ids])
 
@@ -114,7 +116,7 @@ def main():
 	ans.append(get_commit_metadata(conn,"lifetime_in_days",all_ids))
 	ans.append(get_commit_metadata(conn,"number_of_authors",all_ids))
 
-	ans.append(get_unique_model_file_analyzed(conn, dst_table, all_ids))
+	ans.append(get_unique_model_file_analyzed(conn,ele_change_table , all_ids))
 	for i in range(len(ans)):
 		val = ans[i]
 		#print(len(a))

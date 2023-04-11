@@ -24,7 +24,7 @@ def create_connection( db_file):
 	return conn
 
 def get_project_commit_info(conn):
-	sql = "Select * from github_projects_commit_info order by total_number_of_commits"
+	sql = "Select * from Project_Commit_Summary order by total_number_of_commits"
 	cur = conn.cursor()
 	cur.execute(sql)
 
@@ -66,37 +66,37 @@ def delete_from_table(conn, project_id):
 	try:
 		cur = conn.cursor()
 		
-		issue_sql = "SELECT issue_id from github_issues where project_id = "+str(project_id)
+		issue_sql = "SELECT issue_id from Issues where project_id = "+str(project_id)
 		issue_ids = get_values_from_table(conn, issue_sql)
 
-		pr_sql = "SELECT pr_id from github_pr where project_id = "+str(project_id)
+		pr_sql = "SELECT pr_id from PR where project_id = "+str(project_id)
 		pr_ids = get_values_from_table(conn, pr_sql)
 		
-		pr_tables = ['Github_issue_Pr_comments','Github_Issue_PR_Link','Github_PR_commits']
+		pr_tables = ['Issue_PR_Comments','Issue_PR_links','PR_Commits']
 
 		for table in pr_tables:
 			col = 'pr_id'
-			if table == 'Github_issue_Pr_comments':
+			if table == 'Issue_PR_Comments':
 				col = 'issue_pr_id'
 			sql = "DELETE FROM "+table+" WHERE "+col+" in ("+pr_ids+")"
 			cur.execute(sql)
 			logging.info("%d rows were affected in %s "%(cur.rowcount, table))
 
-		issue_tables = ['Github_issue_Pr_comments','Github_Issue_PR_Link'] 
+		issue_tables = ['Issue_PR_Comments','Issue_PR_links'] 
 		for table in issue_tables:
 			col = 'issue_id'
-			if table == 'Github_issue_Pr_comments':
+			if table == 'Issue_PR_Comments':
 				col = 'issue_pr_id'
 			sql = "DELETE FROM "+table+" WHERE "+col+" in ("+issue_ids+")"
 			cur.execute(sql)
 			logging.info("%d rows were affected in %s "%(cur.rowcount, table))
 
-		tables = ['GitHub_Projects_Commit_Info','GitHub_Model_Commit_Info','Project_commits',\
-		'Model_commits', 'Github_Projects','Github_forked_projects','Github_issues','Github_PR']
+		tables = ['Project_Commit_Summary','Model_Commit_Summary','Project_commits',\
+		'Model_commits', 'Root_Projects','Forked_Projects','Issues','PR']
 		for table in tables:
 			col_name = 'project_id'
-			if table == 'Github_Projects':
-				col_name = 'file_id'
+			if table == 'Forked_Projects':
+				col_name = 'forked_project_id'
 			sql = "DELETE FROM "+table+" WHERE "+col_name+" in ("+str(project_id)+")"
 			cur.execute(sql)
 			logging.info("%d rows were affected in %s "%(cur.rowcount, table))
@@ -150,7 +150,12 @@ def main():
 		cur += 1
 
 	if folder_where_data_is_stored == '':
-		logging.info("Please deleted these project id %s"%(",".join(str(to_be_deleted))))
+		tmp = []
+		for s in to_be_deleted: 
+			print(s)
+			print(str(s))
+			tmp.append(str(s))
+		logging.info("Please deleted these project id %s"%(",".join(tmp)))
 	else:
 		for proj_id in to_be_deleted:  
 			try: 
