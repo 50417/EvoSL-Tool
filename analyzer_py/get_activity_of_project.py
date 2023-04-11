@@ -40,7 +40,7 @@ def date_range(start, end, intv):
 
 def get_project_ids(conn,where_clause = None):
 	cur = conn.cursor()
-	project_ids_sql = "select project_id from github_projects_commit_info"
+	project_ids_sql = "select project_id from Project_Commit_Summary"
 	if where_clause is not None: 
 		project_ids_sql += where_clause
 	cur.execute(project_ids_sql)
@@ -48,7 +48,7 @@ def get_project_ids(conn,where_clause = None):
 	project_ids = [r[0] for r in rows]
 	return project_ids
 def get_start_end_dates(conn,id):
-	sql = "select first_commit,last_commit from GitHub_Projects_Commit_Info where project_id ="+str(id)
+	sql = "select first_commit,last_commit from Project_Commit_Summary where project_id ="+str(id)
 	cur = conn.cursor()
 
 	cur.execute(sql)
@@ -74,7 +74,7 @@ def get_start_end_dates(conn,id):
 
 def project_total_commits(conn,id):
 	cur = conn.cursor()
-	sql = "select total_number_of_commits from Github_Projects_commit_info where project_id  ="+str(id)
+	sql = "select total_number_of_commits from Project_Commit_Summary where project_id  ="+str(id)
 	cur.execute(sql)
 
 	rows = cur.fetchall()
@@ -264,8 +264,8 @@ def plot_commits(data_lst, xlabel="Commits", ylabel=None, figure_name = None):
 
 def get_commits_lst(conn):
 	cur = conn.cursor()
-	SQL = "Select total_number_of_commits, model_commits from GitHub_Projects_Commit_Info a JOIN \
-			GitHub_Projects b on a.project_id = b.file_id \
+	SQL = "Select total_number_of_commits, model_commits from Project_Commit_Summary a JOIN \
+			Root_Projects b on a.project_id = b.file_id \
 			order by model_commits "
 	cur.execute(SQL)
 	rows = cur.fetchall()
@@ -359,14 +359,27 @@ def plot_all(data_lst,xlabel="Project life time", ylabel=None,figurename = None)
 	plt.savefig(figurename)
 	plt.show()
 
+def get_root_ids(conn):
+	cur = conn.cursor()
+	cur.execute("SELECT project_id FROM root_projects")
+
+	rows = cur.fetchall()
+
+	ans =  [r[0] for r in rows]
+	project_ids = [] 
+	for r in ans:
+		project_ids.append(str(r)) 
+	return project_ids
+
 
 
 def main():
-	database = ""
-
+	database =  ""
 	# create a database connection
 	conn = create_connection(database)
-	where_clause = ""
+	root_projectids = get_root_ids(conn)
+	where_clause = " where project_id in ("+",".join(root_projectids)+")"
+	#where_clause = " where model_commits>=10 AND project_id in ("+",".join(root_projectids)+")"
 	project_ids = get_project_ids(conn,where_clause)
 
 	projects_commit_dist = []
