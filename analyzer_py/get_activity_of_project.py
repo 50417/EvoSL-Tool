@@ -418,8 +418,8 @@ def main():
 	plot(avg_model_development_dist, ylabel="Models under development", figurename="model_under_development.pdf")
 
 	project_lifecycles = {
-		"Project Commits":avg_project_commit_dist,
-		"Model Commits":avg_model_commit_dist,
+		"Commits":avg_project_commit_dist,
+		"$\mathregular{Commits_{MS}}$":avg_model_commit_dist,
 		#"Committed Model Modifications":avg_model_modified_commit_dist,
 		"Models under development":avg_model_development_dist
 	}
