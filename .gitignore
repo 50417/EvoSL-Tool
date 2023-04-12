@@ -30,3 +30,5 @@ MANIFEST
 *.sqlite
 *.pdf
 data/
+*.fig
+*.csv
