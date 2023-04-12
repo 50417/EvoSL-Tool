@@ -14,9 +14,36 @@ function plot_and_print_results(obj)
     ytick = [0:25000:125000];
     ylimits = [0 120000];
     y_label = 'Total number of changes';
-    [blk_type_name, blk_count] = obj.get_block_type_and_count_over_20();
+    [blk_type_name, blk_count] = obj.get_block_type_and_count_over_20(50);
     plot.plot_bar(blk_type_name,blk_count,15000,90,90,ytick,ylimits,y_label);
+
+    len_blk_type_name = length(blk_type_name);
+   
+
+    normalized_count = [];
+    blk_type_distinct_count = obj.get_distinct_block_count_per_type();
+    all_keys = keys(blk_type_distinct_count);
+    for r = 1:len_blk_type_name
+        blk_type_key = blk_type_name(r);
+        if contains(blk_type_key,all_keys)
+            normalized_count = [normalized_count cast(blk_type_distinct_count(blk_type_key),'double')/cast(blk_count(r),'double')];
+        
+        else
+            error("Error. Investigaate")
+        end
     
+    
+    end
+
+    [normalized_block_count, normalized_sorted_idx] =  sort(normalized_count,'descend');
+
+    normalized_block_name = blk_type_name(normalized_sorted_idx);
+    plot.plot_bar(normalized_block_name,normalized_block_count,0.2,90,90,[0:1],[0 1.5],"Normalized change");
+
+
+
+    
+
     [changetype,x_quartile_no_of_change] = obj.get_x_quartile_block_change_per_commit(3);
     disp(changetype); % 75th percentile
     disp(x_quartile_no_of_change);
@@ -32,7 +59,8 @@ function plot_and_print_results(obj)
    
     
     plot.plot_bar(new_change_type,x_quartile_no_of_change,1,75,1,[0:4:26],[0 29],['75th Percentile' newline 'of changes per commit']);
-
+    
+    obj.WriteLog("This can take a long time dependent on the number of element changes. ")
     [category, category_change_percent] = obj.get_blocktype_blockpath_count();
     [~,sorted_idx] = sort(category_change_percent);
 
@@ -48,6 +76,5 @@ function plot_and_print_results(obj)
    
      [doc_changes,doc_type] = obj.get_documentation_changes_percent();
      utils.print_latex_compatible_table(doc_changes,"",doc_type,{'Percentage'});
-
 end
 

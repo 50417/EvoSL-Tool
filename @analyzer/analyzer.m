@@ -3,9 +3,9 @@ classdef analyzer
     %   Detailed explanation goes here
     
     properties
-        model_evol_db = '/home/sohil/Downloads/EvolPaper/SLNETEvol_test.sqlite';% update this database with model_evol sqlite db
-        
-        table_name;
+        model_evol_db = '';% update this database with model_evol sqlite db
+        table_name =''; % Table name : Model_element_changes OR Any other table name you used to extract element using compareModelSnapshot
+
         conn;
         logfilename;
         blk_category_map;
@@ -16,7 +16,7 @@ classdef analyzer
             %ANALYZER Construct an instance of this class
             %   Detailed explanation goes here
             obj.conn = utils.connect_db(obj.model_evol_db);
-            obj.table_name = "";
+            %obj.table_name = "Model_changes_filtered";
             obj.logfilename = strcat('analyzer_log',datestr(now, 'dd-mm-yy-HH-MM-SS'),'.txt');
 
             obj.WriteLog('open');
@@ -59,7 +59,9 @@ classdef analyzer
         res_vector = get_vector_per_node_type(obj, node_type,nodeandchangetype_count_map);
         
         %block Type and counts
-        [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj);
+        [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj,X);
+        % block ,distinct count per block type
+        [blk_type_distinct_count] = get_distinct_block_count_per_type(obj)
        
         %[blocktype_changetype,median_of_change] =
         %get_median_of_block_change_per_commit(obj); DEPRECATED

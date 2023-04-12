@@ -1,11 +1,11 @@
-function [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj)
+function [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj,X)
 
          block_type_and_count_query = ['SELECT * FROM ' ... 
                 ' (SELECT count(*) cnt, block_type ' ...
                 ' FROM ' char(obj.table_name) ...
                 ' WHERE Block_Type != "" ' ...
                 ' GROUP BY block_type)' ...
-                ' WHERE cnt > 50' ...
+                ' WHERE cnt > ' int2str(X) ...
                 ' ORDER BY cnt desc'];
          
         result = fetch(obj.conn, block_type_and_count_query);
@@ -37,7 +37,7 @@ function [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj)
              mdl_info_blk_cnt = result{1,1};
              
              blk_count(subsys_idx) = blk_count(subsys_idx) - doc_blk_cnt - mdl_info_blk_cnt;
-             if doc_blk_cnt > 50
+             if doc_blk_cnt > X
                 blk_count = [blk_count doc_blk_cnt];
                 [blk_count, idx] = sort(blk_count,'descend');
                 new_len = length(blk_count);
@@ -53,7 +53,7 @@ function [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj)
                     blk_type_name(1,idx_to_be_right_shift) = {'DocBlock'};
                 end
              end 
-             if mdl_info_blk_cnt > 50 
+             if mdl_info_blk_cnt > X 
                  blk_count = [blk_count mdl_info_blk_cnt];
                 [blk_count, idx] = sort(blk_count,'descend');
                 new_len = length(blk_count);
