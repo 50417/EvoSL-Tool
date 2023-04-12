@@ -1,5 +1,3 @@
-1. [Repository Mining for Changes in Simulink Models]
-
 
 We have different tools in the repository that work with each other:
 1. [SimMiner]
