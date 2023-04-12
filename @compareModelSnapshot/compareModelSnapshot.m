@@ -7,8 +7,8 @@ classdef compareModelSnapshot
         project_id;
         project_name; %Project name is the name of the project when downloaded GitHub zip is extracted 
         working_dir;
-        project_commit_db = '/home/sls6964xx/Downloads/EvolPaper/31Simulink_Projects_with_forks.sqlite'; %location to project commits dabatase
-        model_evol_db = ''
+        project_commit_db; %location to project commits dabatase
+        model_evol_db;
         
         ignoreNewFileAddedOrDeleted = true; 
         colnames = {'project_id','parent_sha','child_sha','model',...
@@ -25,14 +25,15 @@ classdef compareModelSnapshot
     end
     
     methods
-        function obj = compareModelSnapshot(model_comparison_utility_folder,project_loc_or_url, varargin)
+        function obj = compareModelSnapshot(proj_commit_snapshot_folder,project_commit_db,model_comparison_utility_folder,project_loc_or_url, varargin)
             % model_comparison_utility_folder : https://zenodo.org/record/6410073#.Y1Ggm9LMJhE / Version 1.4 is used in this study
             % if project_loc_or_url = project location in the local file system: note that github projectm downloaded as zip wont work 
             % varargin must be the github project url 
             
        
-  
-            obj.proj_commit_snapshot_folder = 'proj_commit_snapshot_folder';
+            obj.project_commit_db = project_commit_db;
+            obj.model_evol_db = obj.project_commit_db;
+            obj.proj_commit_snapshot_folder = proj_commit_snapshot_folder;
             %obj.project_name = project_name;
             obj.working_dir = 'workdir';
             obj.logfilename = strcat('model_evol_log_',datestr(now, 'dd-mm-yy-HH-MM-SS'),'.txt');
@@ -50,7 +51,7 @@ classdef compareModelSnapshot
             if strcmp(obj.model_evol_db,"")
                 obj.model_evol_db = obj.project_commit_db;
             end
-            obj.table_name = "Model_Evolution";
+            obj.table_name = "Model_Element_Changes";
             obj.conn = obj.connect_db_and_create_table(obj.model_evol_db,obj.table_name);
             
             

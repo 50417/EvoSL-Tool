@@ -3,7 +3,7 @@ function [child_parent_version_sha,project_id] = get_project_commit_hashes(obj,p
    
     conn = sqlite( obj.project_commit_db,'connect');
     % Getting project id
-    project_id_sql = strcat('select file_id from github_projects where project_url = "',project_url,'"');
+    project_id_sql = strcat('select project_id from Root_Projects where project_url = "',project_url,'"');
     obj.WriteLog(strcat("SQL Project ID : ",project_id_sql));
     results = fetch(conn,project_id_sql);
     if width(results) ~= 1
