@@ -119,7 +119,7 @@ class GithubRepoDownload():
 		
 
 		start_date = datetime.date(2008, 1, 1) 
-		end_date = datetime.date(2009, 1, 1) #datetime.date.today()
+		end_date = datetime.date.today()
 		self.interval = datetime.timedelta(365)
 
 		self.counter = 0
