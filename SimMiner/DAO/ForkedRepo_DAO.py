@@ -11,7 +11,7 @@ class SimulinkForkedRepoInfo(Base):
 	'''
 	__tablename__ = "Forked_Projects"
 
-	id = Column('project_id', Integer, primary_key=True)
+	id = Column('forked_project_id', Integer, primary_key=True)
 	forked_from_id = Column('forked_from_id', Integer)
 	
 	repo_name = Column('repo_name', String)

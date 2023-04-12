@@ -11,7 +11,7 @@ class SimulinkRepoInfo(Base):
 	'''
 	__tablename__ = "Root_Projects"
 
-	id = Column('file_id', Integer, primary_key=True)
+	id = Column('project_id', Integer, primary_key=True)
 	repo_name = Column('repo_name', String)
 	owner = Column('owner_name', String)
 	owner_type = Column('owner_type', String)
