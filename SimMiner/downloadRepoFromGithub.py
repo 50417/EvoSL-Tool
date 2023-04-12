@@ -119,7 +119,7 @@ class GithubRepoDownload():
 		
 
 		start_date = datetime.date(2008, 1, 1) 
-		end_date = datetime.date.today()
+		end_date = datetime.date(2009, 1, 1) #datetime.date.today()
 		self.interval = datetime.timedelta(365)
 
 		self.counter = 0
@@ -220,8 +220,8 @@ class GithubRepoDownload():
 					fileName_csv=filename+","+fileName_csv
 		if count > 0:
 			self.simulinkmodels_count[projectname] = count
-			#Uncomment this if you want to store the repo locally. May require large storage.
-			shutil.rmtree(folder,ignore_errors=True)
+			#UnComment this if you dont want to store the repo locally. otherwise May require large storage.
+			#shutil.rmtree(folder,ignore_errors=True)
 			#self.update_model_file_info_in_db(repo.id,{"model_files":fileName_csv})
 			#self.update_model_file_info_in_db(repo.id, {"has_model_files":1})
 			#self.update_model_file_info_in_db(repo.id,{"num_model_file":count})
@@ -279,9 +279,9 @@ parser.add_argument('-q', '--query', dest="query", type=str,
 parser.add_argument('-d', '--dir', dest="dir_name", type=str,
 					help='Name of directory to store downloaded files ')
 parser.add_argument('-db', '--dbname', dest="db_name", type=str,
-					help='Name of sqlite database to store metadata files ')
+					help='Name of sqlite database (e.g. "a.sqlite")to store metadata files ')
 parser.add_argument('-flag', '--license', dest="l_flag", type=bool,
-					help='Boolean value to determine to include only those project with license| Dont include the file if downloading all projects')
+					help='Boolean value to determine to include only those project with license| Dont include the flag if downloading all projects')
 parser.add_argument("-t", '--token', dest="token", type=str,
 					help = 'https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line')
 args = parser.parse_args()

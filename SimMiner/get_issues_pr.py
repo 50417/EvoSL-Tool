@@ -162,7 +162,7 @@ def create_connection(db_file):
 	return conn
 
 
-def get_repo_id_urls(conn):
+def get_repo_id_urls(conn,get_from_forked_FLAG):
 	"""
 	Query tasks
 	:param conn: the Connection object
@@ -170,7 +170,12 @@ def get_repo_id_urls(conn):
 	:return:
 	"""
 	cur = conn.cursor()
-	cur.execute("SELECT file_id,project_url FROM GitHub_Projects order by file_id")
+	if get_from_forked_FLAG: 
+		cur.execute("SELECT forked_project_id,project_url FROM Forked_Projects order by forked_project_id")
+
+	else:
+
+		cur.execute("SELECT project_id,project_url FROM Root_Projects order by project_id")
 
 	rows = cur.fetchall()
 	return rows						
@@ -179,26 +184,28 @@ def get_repo_id_urls(conn):
 
 def main():
 	parser = argparse.ArgumentParser(description='Get argument for downloading')
-	parser.add_argument('-d', '--dir', dest="dir_name", type=str,
-					help='Name of directory to store downloaded files ')
 	parser.add_argument('-db', '--dbname', dest="db_name", type=str,
-					help='Name of sqlite database to get as well as store metadata')
+					help='Name of sqlite database (e.g. "a.sqlite") to get as well as store metadata')
 	parser.add_argument("-t", '--token', dest="token", type=str,
 					help = 'https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line')
+	parser.add_argument('-f', '--forked', dest="f_flag", default=False,action='store_true',
+					help='Boolean value to determine to include only those project with license| Dont include the file if downloading all projects')
+
 	args = parser.parse_args()
 
 	dbname = args.db_name
 	token = args.token # BASIC AUTH OR OAUTH 5000 requests per hour ||  30 requests per minute for using SEARCH API
+	get_from_forked_FLAG = args.f_flag
 
 	project_obj = Issues_PR(token, dbname)
-	conn = create_connection(dbname+'.sqlite')
+	conn = create_connection(dbname)
 	
 	processed_ones = []
-	if ~os.path.exists('cached.csv'):
-		f = open('cached.csv','a')
+	if ~os.path.exists('issue_cached.csv'):
+		f = open('issue_cached.csv','a')
 		f.close()
 
-	with open('cached.csv','r') as processed_file_id:
+	with open('issue_cached.csv','r') as processed_file_id:
 		line = processed_file_id.readline()
 		processed_till = line.strip()
 		if processed_till == '':
@@ -208,7 +215,7 @@ def main():
 	#processed_file_ids = set(processed_ones)
 
 	with conn: 
-		id_urls = get_repo_id_urls(conn)
+		id_urls = get_repo_id_urls(conn,get_from_forked_FLAG)
 
 
 	
@@ -231,7 +238,7 @@ def main():
 			logging.error("Error Processing the Project")
 			logging.error(e) 
 		
-		with open('cached.csv','w') as cached_p_id:
+		with open('issue_cached.csv','w') as cached_p_id:
 			cached_p_id.write(str(file_id))
 
 
