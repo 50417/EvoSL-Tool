@@ -59,7 +59,7 @@ classdef analyzer
         res_vector = get_vector_per_node_type(obj, node_type,nodeandchangetype_count_map);
         
         %block Type and counts
-        [blk_type_name, blk_count] = get_block_type_and_count_over_20(obj,X);
+        [blk_type_name, blk_count] = get_block_type_and_count_over_X(obj,X);
         % block ,distinct count per block type
         [blk_type_distinct_count] = get_distinct_block_count_per_type(obj)
        

@@ -14,7 +14,7 @@ function plot_and_print_results(obj)
     ytick = [0:25000:125000];
     ylimits = [0 120000];
     y_label = 'Total number of changes';
-    [blk_type_name, blk_count] = obj.get_block_type_and_count_over_20(50);
+    [blk_type_name, blk_count] = obj.get_block_type_and_count_over_X(50);
     plot.plot_bar(blk_type_name,blk_count,15000,90,90,ytick,ylimits,y_label);
 
     len_blk_type_name = length(blk_type_name);
