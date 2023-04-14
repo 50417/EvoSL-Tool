@@ -195,14 +195,14 @@ def main():
 		
 		
 
-		ax1.plot(m_ele,m_c_ratio, color='black', linestyle=linestyles[cnt],marker=marker_choice[0],label="$Model commits_{"+label_suffix[cnt]+"}$",linewidth=1,markersize=4)
-		ax1.plot(i_ele,i_c_ratio, color='black',linestyle=linestyles[cnt], marker=marker_choice[1],label="$Issues_{"+label_suffix[cnt]+"}$",linewidth=1,markersize=4)
-		ax1.plot(pr_ele,pr_c_ratio,color='black',linestyle=linestyles[cnt],marker=marker_choice[2],label="$Pull request_{"+label_suffix[cnt]+"}$",linewidth=1,markersize=4)
+		ax1.plot(m_ele,m_c_ratio, color='black', linestyle=linestyles[cnt],marker=marker_choice[0],label="$\mathregular{Commits_{MS("+label_suffix[cnt]+")}}$",linewidth=1,markersize=4)
+		ax1.plot(i_ele,i_c_ratio, color='black',linestyle=linestyles[cnt], marker=marker_choice[1],label="$\mathregular{Issues_{("+label_suffix[cnt]+")}}$",linewidth=1,markersize=4)
+		ax1.plot(pr_ele,pr_c_ratio,color='black',linestyle=linestyles[cnt],marker=marker_choice[2],label="$\mathregular{Pull request_{("+label_suffix[cnt]+")}}$",linewidth=1,markersize=4)
 		
 
 		
 		ax2_color = 'C0'
-		ax2.plot(p_ele,p_c_ratio,color=ax2_color,linestyle=linestyles[cnt], marker=marker_choice[3],label="$Project commits_{"+label_suffix[cnt]+"}$", linewidth=1,markersize=4)
+		ax2.plot(p_ele,p_c_ratio,color=ax2_color,linestyle=linestyles[cnt], marker=marker_choice[3],label="$\mathregular{Commits_{("+label_suffix[cnt]+")}}$", linewidth=1,markersize=4)
 		
 		
 		
