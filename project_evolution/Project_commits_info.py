@@ -9,7 +9,7 @@ class Project_commits_info(Base):
 	'''
 	model class for Simulink Repo Info
 	'''
-	__tablename__ = "GitHub_Projects_Commit_Info"
+	__tablename__ = "Project_Commit_Summary"
 	id = Column('project_id', Integer, primary_key=True)
 	total_number_of_commits = Column('Total_number_of_commits', Integer)
 	number_of_merge_commits = Column('Number_of_merge_commits', Integer)

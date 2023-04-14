@@ -34,7 +34,7 @@ def get_changed_files(modified_files_obj, commit , model_verbatim, project_id):
     return ",".join(file_change_list), CONTAINS_MODEL_FLAG
 
 
-def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
+def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim,is_forked,start_from_commit):
     hashes_per_project = []
     commits_dates_per_project = []
     merge_commits_per_project = set()
@@ -42,7 +42,18 @@ def get_project_level_commits(repo_url,hash,project_verbatim,id,model_verbatim):
     commit_per_day = {}
     model_commits = []
     model_authors = set()
-    for commit in RepositoryMining(repo_url).traverse_commits():
+    print(start_from_commit)
+    if is_forked:
+        if start_from_commit is None:
+            raise Exception("Something is wrong . Check")
+        try: 
+            all_commits = RepositoryMining(repo_url, from_commit=start_from_commit).traverse_commits()
+        except Exception as e: 
+            raise Exception("Something is wrong")
+    else: 
+        all_commits = RepositoryMining(repo_url).traverse_commits()
+
+    for commit in all_commits:
         modified_files, CONTAINS_MODEL_FLAG = get_changed_files(commit.modifications, commit, model_verbatim,id)
         try: 
             project_verbatim.insert(id,commit,modified_files)

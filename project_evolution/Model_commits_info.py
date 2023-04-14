@@ -10,7 +10,7 @@ class Model_commits_info(Base):
 	'''
 	model class for Simulink Repo Info
 	'''
-	__tablename__ = "GitHub_Model_Commit_Info"
+	__tablename__ = "Model_Commit_Summary"
 	id = Column('project_id', Integer)
 	model_name =  Column('model_name', String)
 	total_number_of_commits = Column('Total_number_of_commits', Integer)
