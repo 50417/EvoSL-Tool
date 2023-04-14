@@ -3,7 +3,14 @@ function process_project(obj)
      %all_sub_folders = dir(obj.proj_commit_snapshot_folder);
      %all_sub_folders = all_sub_folders(3:end);
      %sub_folder_num = length(all_sub_folders);
-     total_model_snapshots = height(child_parent_version_sha);
+     
+     if verLessThan('matlab', '22.0')
+        total_model_snapshots = length(child_parent_version_sha);
+    else
+        total_model_snapshots = height(child_parent_version_sha);;
+        
+    end
+     
      obj.WriteLog(sprintf('Total Number of Model Snapshots = %d',total_model_snapshots));
      
      processing_folder_sql = ['SELECT  DISTINCT project_id, parent_sha, child_sha, model from ' char(obj.table_name) ];

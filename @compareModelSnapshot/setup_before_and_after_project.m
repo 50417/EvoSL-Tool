@@ -30,8 +30,12 @@ function [status] = setup_before_and_after_project(obj, project_loc_or_url)
             if ~exist(after_folder)
                 mkdir(after_folder);
             end
-            copyfile(project_loc_or_url,before_folder);
-            copyfile(project_loc_or_url,after_folder);
+            
+            %copyfile(project_loc_or_url,before_folder);
+            system(['cp -r ' project_loc_or_url filesep '. ' char(before_folder)]);
+            
+            system(['cp -r ' project_loc_or_url filesep '. ' char(after_folder)]);
+            %copyfile(project_loc_or_url,after_folder);
             status = 0;
         end
 end
