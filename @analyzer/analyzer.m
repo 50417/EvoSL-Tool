@@ -4,7 +4,7 @@ classdef analyzer
     
     properties
         model_evol_db = '';% update this database with model_evol sqlite db
-        table_name =''; % Table name : Model_element_changes OR Any other table name you used to extract element using compareModelSnapshot
+        table_name ='Cleaned_Model_element_changes'; % Table name : Cleaned_Model_element_changes OR Any other table name you used to extract element using compareModelSnapshot
 
         conn;
         logfilename;

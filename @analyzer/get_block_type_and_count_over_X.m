@@ -20,7 +20,11 @@ function [blk_type_name, blk_count] = get_block_type_and_count_over_X(obj,X)
             end
         end
         % result(:,2)
-        blk_type_name = result{:,2}';
+        if verLessThan('matlab', '9.13')
+            blk_type_name = result(:,2)';
+        else
+            blk_type_name = result{:,2}';
+        end
         if subsys_idx ~= -1
             block_type_and_count_query = ['SELECT count(*) cnt ' ...
                 ' FROM ' char(obj.table_name) ...
