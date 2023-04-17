@@ -15,11 +15,25 @@ function [blocktype_lib_map] = getblock_library_map(varargin)
     simulinkLibraryPaths = utils.remove_strmatching_cellarr(simulinkLibraryPaths,'Commonly Used Blocks',1);
     simulinkLibraryPaths = utils.remove_strmatching_cellarr(simulinkLibraryPaths,'Quick Insert',1);
     simulinkLibraryPaths = utils.remove_strmatching_cellarr(simulinkLibraryPaths,'/',1);
-    pat = regexpPattern("Additional Math: Increment - Decrement$"); % Ends with;
+    if verLessThan('matlab', '9.13')
+        pat = "Additional Math: Increment - Decrement$";
+    else
+        pat = regexpPattern("Additional Math: Increment - Decrement$"); % Ends with;
+    end
     simulinkLibraryPaths = utils.remove_strmatching_cellarr(simulinkLibraryPaths,pat,1);
-    pat = regexpPattern("Additional Discrete$"); % Ends with;
+     if verLessThan('matlab', '9.13')
+        pat = "Additional Discrete$";
+    else
+        pat = regexpPattern("Additional Discrete$"); % Ends with;
+    end
+    
     simulinkLibraryPaths = utils.remove_strmatching_cellarr(simulinkLibraryPaths,pat,1);
-    pat = regexpPattern("Examples$"); % Ends with;
+     if verLessThan('matlab', '9.13')
+        pat = "Examples$";
+    else
+        pat = regexpPattern("Examples$"); % Ends with;
+    end
+  
     simulinkLibraryPaths = utils.remove_strmatching_cellarr(simulinkLibraryPaths,pat,1);
     
     %simulinkLibraryBlockTypes = get_param(simulinkLibraryPaths, 'BlockType');
