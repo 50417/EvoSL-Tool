@@ -72,9 +72,9 @@ def main():
 	db = "" 
 	conn = create_connection(db)
 
-	change_2022 = get_all_rows(conn,"Model_evolution")
+	change_2022 = get_all_rows(conn,"model_element_changes_22b")
 
-	change_2019 = get_all_rows(conn,"Model_change_minimize_risk")
+	change_2019 = get_all_rows(conn,"five_sample_element_changes_19a")
 	only_in_19 = 0 
 	only_in_22= 0
 	total_in_19 = 0 
