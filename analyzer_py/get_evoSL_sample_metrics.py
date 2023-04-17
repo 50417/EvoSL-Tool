@@ -124,7 +124,7 @@ def get_unique_model(conn, where_clause = None):
 	returns absolute lifetime of project or model(days) in a list
 	'''
 	cur = conn.cursor()
-	sql ="select Count(Distinct model) m, project_id from Model_Element_Changes"+where_clause+" group by project_id order by m"
+	sql ="select Count(Distinct model) m, project_id from Cleaned_Model_Element_Changes"+where_clause+" group by project_id order by m"
 
 	cur.execute(sql)
 
@@ -137,6 +137,35 @@ def convert_rows_to_set(rows):
 		res.add(r[0])
 	return res
 
+def get_aggregate_ratio(lst, total):
+	rows = len(lst)
+	cols = 4
+	all_cols = []
+	for col in range(cols):
+		col_sum = 0
+		for row in range(rows):
+			col_sum += lst[row][col]
+		all_cols.append(col_sum/total*100)
+	assert(len(all_cols) == 4)
+	
+
+	return str(round(all_cols[0],1))+"\t&"+str(round(all_cols[1],1))+"\t&"+str(round(all_cols[2],1))+\
+		   "\t&"+str(round(all_cols[3],1))
+
+
+def get_evoSL_sample_project_id(conn):
+	sql = "Select Distinct project_id from Cleaned_Model_Element_Changes"
+
+	cur = conn.cursor()
+	cur.execute(sql)
+	rows = cur.fetchall()
+
+	ans =  [r[0] for r in rows]
+	project_ids = [] 
+	for r in ans:
+		project_ids.append(str(r)) 
+	return project_ids
+
 
 def main():
 	start = time.time()
@@ -144,7 +173,7 @@ def main():
 	
 	# create a database connection
 	conn = create_connection(evosl_sample_database)
-	projectids = ["64223824","476168345","588267715","20451353","68744081","250217878","366359636","337996515","100999374","261484515","305846578","317540119","595154955","287361574","301176100","267839196","13328139","204030363","60685110","468290383","14375685","237132537","355203229","184514360","194490625","312007661","130222499","295851609","124382232","211239358","118747568","334101825","470647234","113453905","54991377","12136324","126338636","296797895","93419327","213199113","546546451","370616572","39600731","389552676","432334495","299664596","789683","47131658","419153598","131173589"]
+	projectids = get_evoSL_sample_project_id(conn)#["64223824","476168345","588267715","20451353","68744081","250217878","366359636","337996515","100999374","261484515","305846578","317540119","595154955","287361574","301176100","267839196","13328139","204030363","60685110","468290383","14375685","237132537","355203229","184514360","194490625","312007661","130222499","295851609","124382232","211239358","118747568","334101825","470647234","113453905","54991377","12136324","126338636","296797895","93419327","213199113","546546451","370616572","39600731","389552676","432334495","299664596","789683","47131658","419153598","131173589"]
 	
 	where_clause = " where project_id in ("+",".join(projectids)+") "
 
@@ -192,14 +221,15 @@ def main():
 
 	for lst in CStudy:
 		print(calculate_ratios(lst,total)) 
+	print(get_aggregate_ratio(CStudy,total))
 
 	print("=======================================================")
-	evoSample_block = [31032, 125998, 106041, 124166]
-	evoSample_Line = [662, 7063, 142058, 165353]
-	evoSample_port = [6, 122, 332, 693]
-	evoSample_mask = [0, 3590, 1880, 2487]
-	evoSample_annotation = [541, 585, 3651, 3047]
-	evoSample_configuration = [24, 5198, 261, 2471]
+	evoSample_block = [24988, 84430, 64433, 82708]
+	evoSample_Line = [504, 4255, 97774, 119080]
+	evoSample_port = [0, 124, 10621, 13617]
+	evoSample_mask = [0, 2768, 1497, 1984]
+	evoSample_annotation = [390, 426, 2468, 2183]
+	evoSample_configuration = [142, 4130, 220, 1862]
 
 	evoSample = [evoSample_block,evoSample_Line,evoSample_port,evoSample_mask,evoSample_annotation,evoSample_configuration]
 	total = 0 
@@ -207,7 +237,8 @@ def main():
 		total+=sum(lst)
 
 	for lst in evoSample:
-		print(calculate_ratios(lst,total)) 
+		print(calculate_ratios(lst,total))
+	print(get_aggregate_ratio(evoSample,total)) 
 		
 
 

@@ -148,8 +148,9 @@ def get_percentage(num,deno):
 	return num/deno*100
 
 def main(): 
-
+	# EvoSL
 	our_db = ""
+	#EvoSL+ 
 	raw_db = ""
 	fig = plt.figure()
 	ax1 = fig.add_subplot(111, label="1")
@@ -209,7 +210,7 @@ def main():
 		cnt += 1
 		#plt.savefig("metric_distribution.pdf")
 	ax1.axis(xmin=0,xmax=16,ymin=0, ymax=1.0)
-	ax1.set_xlabel("Number of (Model Commits | Issues | Pull request) in Project", color="black")
+	ax1.set_xlabel("Number of ($\mathregular{Commits_{MS}}$ | Issues | Pull request) in Project", color="black")
 	ax1.set_ylabel("Cumulative Proportion of Projects", color="black")
 	ax1.legend(loc=4,prop={'size': 11})
 

@@ -179,12 +179,27 @@ def get_root_ids(conn):
 		project_ids.append(str(r)) 
 	return project_ids
 
+
+def get_evoSL_sample_project_id(conn):
+	sql = "Select Distinct project_id from Cleaned_Model_Element_Changes"
+
+	cur = conn.cursor()
+	cur.execute(sql)
+	rows = cur.fetchall()
+
+	ans =  [r[0] for r in rows]
+	project_ids = [] 
+	for r in ans:
+		project_ids.append(str(r)) 
+	return project_ids
+
 #sql = "select cast(Model_commits as float)/cast(Total_number_of_commits as float)*100 per from Project_Commit_Summary order by per"
 
 def main():
 	start = time.time()
 	evosl_database = ""
 	evoslplus_database = ""
+	evoslsample_database = ""
 
 	# create a database connection
 	plus_conn = create_connection(evoslplus_database)
@@ -243,12 +258,14 @@ def main():
 
 	print("=======================================================")
 
-
-	sample_ids = ["64223824","476168345","588267715","20451353","68744081","250217878","366359636","337996515","100999374","261484515","305846578","317540119","595154955","287361574","301176100","267839196","13328139","204030363","60685110","468290383","14375685","237132537","355203229","184514360","194490625","312007661","130222499","295851609","124382232","211239358","118747568","334101825","470647234","113453905","54991377","12136324","126338636","296797895","93419327","213199113","546546451","370616572","39600731","389552676","432334495","299664596","789683","47131658","419153598","131173589"]
-	print(len(sample_ids))
+	
 	
 	# create a database connection
-	conn = create_connection(evosl_database)
+	conn = create_connection(evoslsample_database)
+
+	sample_ids = get_evoSL_sample_project_id(conn)
+	#sample_ids = ["64223824","476168345","588267715","20451353","68744081","250217878","366359636","337996515","100999374","261484515","305846578","317540119","595154955","287361574","301176100","267839196","13328139","204030363","60685110","468290383","14375685","237132537","355203229","184514360","194490625","312007661","130222499","295851609","124382232","211239358","118747568","334101825","470647234","113453905","54991377","12136324","126338636","296797895","93419327","213199113","546546451","370616572","39600731","389552676","432334495","299664596","789683","47131658","419153598","131173589"]
+	print(len(sample_ids))
 	where_clause = " where project_id in ("+",".join(sample_ids)+") "
 
 	print("Project level metrics")
