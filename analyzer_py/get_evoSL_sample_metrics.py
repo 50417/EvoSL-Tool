@@ -224,12 +224,20 @@ def main():
 	print(get_aggregate_ratio(CStudy,total))
 
 	print("=======================================================")
+	'''
 	evoSample_block = [24988, 84430, 64433, 82708]
 	evoSample_Line = [504, 4255, 97774, 119080]
 	evoSample_port = [0, 124, 10621, 13617]
 	evoSample_mask = [0, 2768, 1497, 1984]
 	evoSample_annotation = [390, 426, 2468, 2183]
 	evoSample_configuration = [142, 4130, 220, 1862]
+	'''
+	evoSample_block = [30183 , 106093 , 69985 , 93295]
+	evoSample_Line = [558 , 4385 , 106575 , 134340 ]
+	evoSample_port = [0 , 124 , 10774 , 13951]
+	evoSample_mask = [0 , 3148 , 1709 , 2343]
+	evoSample_annotation = [ 407 , 482 , 2871 , 2723]
+	evoSample_configuration = [142 , 4130 , 220 , 1862 ]
 
 	evoSample = [evoSample_block,evoSample_Line,evoSample_port,evoSample_mask,evoSample_annotation,evoSample_configuration]
 	total = 0 

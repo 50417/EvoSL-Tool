@@ -11,8 +11,8 @@ function plot_and_print_results(obj)
     utils.print_latex_compatible_table(node_changetype_matrix,"Element\ChangeType",change_type,node_type,true);
     plot.plot_stacked_bar(node_changetype_matrix,node_type);   
     
-    ytick = [0:25000:75000];
-    ylimits = [0 100000];
+    ytick = [0:25000:100000];
+    ylimits = [0 125000];
     y_label = 'Total number of changes';
     [blk_type_name, blk_count] = obj.get_block_type_and_count_over_X(50);
     plot.plot_bar(blk_type_name,blk_count,15000,90,90,ytick,ylimits,y_label);
@@ -20,9 +20,7 @@ function plot_and_print_results(obj)
     len_blk_type_name = length(blk_type_name);
    
     % Only tested on R2022b
-    if verLessThan('matlab', '9.13')
-        continue;
-    else
+    if ~verLessThan('matlab', '9.13')
         normalized_count = [];
         blk_type_distinct_count = obj.get_distinct_block_count_per_type();
         all_keys = keys(blk_type_distinct_count);
@@ -78,6 +76,6 @@ function plot_and_print_results(obj)
        
          [doc_changes,doc_type] = obj.get_documentation_changes_percent();
          utils.print_latex_compatible_table(doc_changes,"",doc_type,{'Percentage'});
-         end
+    end
 end
 

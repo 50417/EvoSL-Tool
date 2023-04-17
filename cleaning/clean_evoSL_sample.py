@@ -139,7 +139,7 @@ def get_unknown_counts(conn, table):
 
 def main(): 
 	evo_SL_sample_db = ""
-	conn = create_connection(db)
+	conn = create_connection(evo_SL_sample_db)
 
 	ele_change_table = "Model_Element_Changes"
 	dst_table ="Cleaned_Model_Element_Changes"

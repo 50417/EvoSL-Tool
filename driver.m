@@ -6,11 +6,12 @@ proj_commit_snapshot_folder = "/tmp/proj_commit_snapshot_folder";
 
 conn = sqlite( project_commit_db,'connect');
 % Getting project id
-project_id_sql = strcat('select project_id from Root_Projects ');
+% change SQL as you see fit.
+project_id_sql = strcat('select * from (select * from project_commit_summary order by model_commits desc limit 50)');
 results = fetch(conn,project_id_sql);
 
-x = results{:,1};
-x = x';
+x = [results{:,1}];
+%x = x';
 conn = utils.connect_db(project_commit_db);
 
 n = length(x);
@@ -24,7 +25,7 @@ for i = 1:n
      result = fetch(conn, sql);
      [rows,~] = size(result);
 
-     proj_loc = strcat('project_location',filesep,int2str(x(i)));
+     proj_loc = strcat(project_location,filesep,int2str(x(i)));
 
     m_obj = compareModelSnapshot(proj_commit_snapshot_folder,project_commit_db, dependenc,proj_loc,result{rows,1});
     m_obj.process_project();
