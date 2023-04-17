@@ -2,6 +2,19 @@
 
 ````
 -----------------------------------------------------------------------------------------------------
+MATLAB Version: 9.6.0.1472908 (R2019a) Update 9
+Operating System: Linux 5.4.0-84-generic #94~18.04.1-Ubuntu SMP Thu Aug 26 23:17:46 UTC 2021 x86_64
+Java Version: Java 1.8.0_181-b13 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+-----------------------------------------------------------------------------------------------------
+MATLAB                                                Version 9.6         (R2019a)
+Simulink                                              Version 9.3         (R2019a)
+Database Toolbox                                      Version 9.1         (R2019a)
+Simulink Check                                        Version 4.3         (R2019a)
+Simulink Test                                         Version 3.0         (R2019a)
+````
+
+````
+-----------------------------------------------------------------------------------------------------
 MATLAB Version: 9.13.0.2193358 (R2022b) Update 5
 Operating System: Linux 5.4.0-84-generic #94~18.04.1-Ubuntu SMP Thu Aug 26 23:17:46 UTC 2021 x86_64
 Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
