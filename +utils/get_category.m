@@ -24,8 +24,13 @@ function [category] = get_category(blk_type,lib_or_blk_path,constructor_flag,var
                 end
             case 'Math Operations'
                 category = 'Math';
-                if strcmp(blk_type,'Assignment')
+                if strcmp(blk_type,'Assignment') || strcmp(blk_type,'Concatenate') 
                     category = 'Signal Routing';
+                end
+            case 'Continuous'
+                category = 'Continuous';
+                if strcmp(blk_type,'Integrator')
+                    category = 'Discrete';
                 end
             case 'Model-Wide Utilities'
                  category = potential_category;
@@ -43,9 +48,14 @@ function [category] = get_category(blk_type,lib_or_blk_path,constructor_flag,var
                      category = 'Conditional';
               
                  end
+            case 'Conditional'
+                category = potential_category;
+                if strcmp(blk_type,'Function-Call-Generator')
+                    category = 'Trigger';
+                end
             case 'Signal Routing'
                 category = potential_category;
-                if strcmp(blk_type,'Switch') || strcmp(blk_type,'ManualSwitch')
+                if strcmp(blk_type,'Switch') || strcmp(blk_type,'ManualSwitch') || strcmp(blk_type,'MultiPortSwitch')
                     category = 'Conditional';
                 end
             case 'User-Defined Functions'
@@ -59,7 +69,16 @@ function [category] = get_category(blk_type,lib_or_blk_path,constructor_flag,var
                  if strcmp(blk_type,'SubSystem') 
                     category = 'Structural';
               
-                end
+                 end
+            case 'Lookup Tables'
+                category = 'Math';
+            case 'Discontinuities'
+                category = potential_category;
+                if strcmp(blk_type,'DeadZone') || strcmp(blk_type,'RateLimiter') || strcmp(blk_type,'Saturate')
+                    category = 'Math';
+              
+                 end
+
 
                 
             case 'Logic and Bit Operations'
@@ -106,7 +125,15 @@ function [category] = get_category(blk_type,lib_or_blk_path,constructor_flag,var
                 if strcmp(category,'Structural') && (endsWith(lib_or_blk_path,'DocBlock') || endsWith(lib_or_blk_path,'Model Info'))
                     category = 'Documentation';
                 end
+                 if strcmp(category,'Structural') && strcmp(lib_or_blk_path,'Signal Builder') 
+                    category = 'Sources';
+                end
             end
+        end
+        if strcmp(blk_type,'ForIterator')
+           category = 'Trigger';
+        elseif strcmp(blk_type,'DataTypePropagation')
+            category = 'Signal Attributes';
         end
     end
 end
