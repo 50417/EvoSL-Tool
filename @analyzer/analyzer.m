@@ -45,7 +45,7 @@ classdef analyzer
              obj.blk_category_map('Trigger').add('ActionPort');
              overlaped = utils.does_map_contain_overlaped_values(obj.blk_category_map);
              if overlaped
-                 error("Block Category map contain overlaped values.")
+                 error('Block Category map contain overlaped values.')
              end
             
         end
@@ -65,7 +65,9 @@ classdef analyzer
        
         %[blocktype_changetype,median_of_change] =
         %get_median_of_block_change_per_commit(obj); DEPRECATED
-        [blocktype_changetype,median_of_change] = get_x_quartile_block_change_per_commit(obj,x)
+        [project_ids_res] = get_project_ids(obj);
+        [blocktype_changetype,median_of_change] = get_x_quartile_block_change_per_project_per_commit(obj,x);
+        [blocktype_changetype,median_of_change] = get_x_quartile_block_change_per_commit(obj,x);
         [changetype,median_no_of_change] = get_median_of_node_change_per_commit(obj,nodetype);
         
         %bubbble chart category change

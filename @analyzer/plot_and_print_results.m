@@ -18,7 +18,14 @@ function plot_and_print_results(obj)
     plot.plot_bar(blk_type_name,blk_count,15000,90,90,ytick,ylimits,y_label);
 
     len_blk_type_name = length(blk_type_name);
-   
+    if verLessThan('matlab','9.7')% 2019a
+        project_ids= obj.get_project_ids();
+        [rows, ~] = size(project_ids);
+        for i=1:rows
+            project_id = project_ids{i,1};
+            obj.get_x_quartile_block_change_per_project_per_commit(project_id);
+        end
+    end 
     % Only tested on R2022b
     if ~verLessThan('matlab', '9.13')
         normalized_count = [];
