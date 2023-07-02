@@ -1,5 +1,19 @@
+# EvoSL-Tool
 
-We have different tools in the repository that work with each other:
+EvoSL-Tool is modular framework that can systematically search for Simulink repository without human intervention. The framework can extract project's associated issues, pull request, commit information and forked repositories. The framework can be used to enlarge the [EvoSL](https://zenodo.org/record/7806457) dataset with new Git repositories in the future. 
+
+The tool also mines element (i.e., block,lines,configuration, ports, mask) level changes of Simulink model versions. The tool can be used to extract element level change data of GitHub based Simulink models. 
+
+-------------------------------
+
+## Recent News
+
+"EvoSL: A Large Open-Source Corpus of
+Changes in Simulink Models & Projects" is accepted in [MODELS 2023](https://conf.researchr.org/track/models-2023/models-2023-technical-track) (CORE A, acceptance rate: 24.6%)
+
+-------------------------------
+
+In this repository, we have three different tool that work with each other:
 1. [SimMiner]
 2. [Project Evolution]
 3. [Compare Model Snapshot]
@@ -7,7 +21,7 @@ We have different tools in the repository that work with each other:
 Clone the project and install the dependencies
 ```sh
 $ git clone <gitlink>
-$ cd SimEvolutionTool
+$ cd EvoSL-Tool
 ```
 
 ## Installation
@@ -24,29 +38,32 @@ Activate environment and Install the dependencies.
 $ conda activate <envname>
 $ pip install -r requirements.txt
 ```
-(maybe adapt exact versions in `requirements.txt` and upgrade pip before: `pip install --upgrade pip` or execute everything with `pip3`)
 
 ## Usage
 
 ### 1. SimMiner
 The tool mines Simulink repository from GitHub and searches for project since 2008. The repository is a cloned one. Make sure you have enough storage in your system.
-- Change  to `SimMiner` directory and Run
+Change  to `SimMiner` directory
+
+#### 1.1 To get Simulink projects
 ```sh
 $ python downloadRepoFromGithub.py --query=<QUERY> --dir=<DIRECTORY_TO_STORE_PROJECTS> --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> --token=<GITHUB_AUTHENTICATION_TOKEN>
 ``` 
+We used query=language:MATLAB and query=simulink
+dbname=evosl.sqlite
 
 Getting Authetication token: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
 
-- To get project's forks
+#### 1.2 To get project's forks 
 
 ```sh
 $ python get_forked_project.py --dir=<DIRECTORY_TO_STORE_PROJECTS> --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> --token=<GITHUB_AUTHENTICATION_TOKEN>
 ``` 
 Use the same database that you use to mine the projects. 
-Use either same dir  or different directory if you want to save forked projects innto different directory.
+Use either same dir  or different directory if you want to save forked projects into different directory.
 
-- To get Projects Issue and PR
+#### 1.3 To get Projects Issue and PR
 ```sh
 $ python get_issues_pr.py --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> --token=<GITHUB_AUTHENTICATION_TOKEN>
 ``` 
@@ -58,30 +75,105 @@ Adding -f flag in the get_forked_project.py and get_issues_pr.py will get the me
 The tool extracts project and model commit history of GitHub Projects. The tool leverages the mined data from [SimMiner]. The mined data consist of GitHub urls which this tool uses to extract project/model commit information. All project evolution data is stored in SQLite database.
 
 In this work, we mined GitHub based simulink project evolution data. But the tool can be used to mine the project commit data of any GitHub project. The model commit data will be mined if the project is a Simulink project. 
-- Update the database on the proj_evol.py file
-- run python project_evol.py
 
+Change to `project_evolution` folder
+
+#### 2.1 To get commit metadata of root and forked projects 
+- Update the proj_evol.py file 
+-- source_database: assign path of the same db as used in SimMiner module
+-- dst_database: Ideally assign same path as source database
+-- is_forked: Set to true when you want to collect forked projects repository. 
+
+NOTE: You need to mine root projects' commit first (i.e. set **is_forked=False**). To avoid extracting duplicate commit metadata, the tool only tries to extract commit of forked projects since when it was forked. 
+
+- run 
+```
+$ python project_evol.py
+```
 ### 3. Compare Model Snapshot
 The tool extracts Simulink model element data of a GitHub Project over the project lifecycle. The tool leverages [Model Comparision Utility] and [Project Evolution]. The tool can be used to extract Simulink model element change data of any GitHub based Simulink project.
 
+Change to the root directory of the project.
 In this work, we mined model element change data of EvoSL projects. 
 - Download and extract [Model Comparision Utility] 
-- Download project evolution data from EvoSL. 
-- Open Matlab. [MATLAB Installation]
-- Update dependenc, project_commit_db, project_location in driver.m
-- In command window, 
+- Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). 
+- Open Matlab R2019a. [MATLAB Installation]
+- In driver.m
+-- Update dependency, project_commit_db, project_location, use_URL in driver.m
+- In MATLAB's command window, 
 ```sh
-$ driver
+>> driver
 ```
+
+NOTE: `use_URL = true` will clone the project from GitHub and disregard project_location. 
+EvoSL already has Model_Element_Canges table that has all the element-level changes of all EvoSL projects. 
+
 All data will be stored in database you listed as  project_commit_db. 
 
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-   [Anaconda]: <https://www.anaconda.com/distribution/>
-   [SimMiner]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/SimMiner>
-   [Compare Model Snapshot]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/%40compareModelSnapshot>
-   [Project Evolution]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/project_evolution> 
-   [Model Comparision Utility]: <https://zenodo.org/record/6410073#.Y-VQINLMK-Y>
-   [EPHCC]: <https://github.com/PowerSystemsHIL/EPHCC>
-   [Repository Mining for Changes in Simulink Models]: <https://ieeexplore.ieee.org/document/9592466>
-   [MATLAB Installation]: <https://github.com/Anonymous-double-blind/SimEvolutionTool/tree/main/MATLABConfiguration.md>
+## To reproduce numbers presented in the paper.
 
+### 1. Reproduce numbers of EvoSL_36
+- Download  Analysis Data from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
+-  In the @analyzer/analyzer.m file
+-- Update model_evol_db = < path to EvoSL_36_2019a.sqlite >
+- Change directory to root of the project
+- In MATLAB command window, run
+```
+>> x = analyzer();
+>> x.plot_and_print_results();
+```
+The above will reproduce TABLE V, Figure 9 and  Table VII
+
+### 2. To generate Figure 6.
+- Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
+- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
+- Change directory to analyzer_py
+- In get_activity_of_project.py, 
+-- Update evoSL_database (database location) as well as relevant boolean flags (i.e. evoSL_or_evoSLPlus_flag, ten_plus_model_commits in main() function
+-- Run 
+```
+$ python get_activity_of_project.py
+```
+
+### To reproduce Table III
+- Change directory to analyzer_py
+- Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
+- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
+- Change directory to analyzer_py
+- In get_evolution_distribution.py, 
+-- Update database location in main() function 
+-- Run 
+```
+$ python get_evolution_distribution.py
+```
+
+### To reproduce Table V
+- Change directory to analyzer_py
+- Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
+- Change directory to analyzer_py
+- In get_evoSL_sample_metrics.py, 
+-- Update database location in main() function 
+-- Run 
+```
+$ python get_evoSL_sample_metrics.py
+```
+
+### To generate Figure 5 
+- Change directory to analyzer_py
+- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
+- Change directory to analyzer_py
+- In get_and_plot_cumulative_metric_distribution.py, 
+-- Update database location in main() function 
+-- Run 
+```
+$ python get_and_plot_cumulative_metric_distribution.py
+```
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+   [Anaconda]: <https://www.anaconda.com/>
+   [SimMiner]: <https://github.com/50417/EvoSL-Tool/tree/main/SimMiner>
+   [Compare Model Snapshot]: <https://github.com/50417/EvoSL-Tool/tree/main/%40compareModelSnapshot>
+   [Project Evolution]: <https://github.com/50417/EvoSL-Tool/tree/main/project_evolution> 
+   [Model Comparision Utility]: <https://zenodo.org/record/6410073#.Y-VQINLMK-Y>
+   [Repository Mining for Changes in Simulink Models]: <https://ieeexplore.ieee.org/document/9592466>
+   [MATLAB Installation]: <https://github.com/50417/EvoSL-Tool/tree/main/MATLABConfiguration.md>
