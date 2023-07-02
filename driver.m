@@ -2,6 +2,7 @@ dependenc = ''; % Download and extract https://zenodo.org/record/6410073#.ZDX-JN
 project_commit_db = ''; % Db where all the metadata is collected. OR use EvoSL.sqlite
 project_location = ''; % where all git projects are stored OR EvoSL project directory
 proj_commit_snapshot_folder = "/tmp/proj_commit_snapshot_folder";
+use_URL = true;
 
 
 conn = sqlite( project_commit_db,'connect');
@@ -25,9 +26,13 @@ for i = 1:n
      result = fetch(conn, sql);
      [rows,~] = size(result);
 
+    if use_URL
+        m_obj = compareModelSnapshot(proj_commit_snapshot_folder,project_commit_db, dependenc,result{rows,1});
+    else
+     
      proj_loc = strcat(project_location,filesep,int2str(x(i)));
-
     m_obj = compareModelSnapshot(proj_commit_snapshot_folder,project_commit_db, dependenc,proj_loc,result{rows,1});
+    end
     m_obj.process_project();
     rmdir(proj_commit_snapshot_folder,'s');
     sprintf("=============DONE %d out of %d============",i,n);

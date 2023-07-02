@@ -4,10 +4,10 @@ function process_project(obj)
      %all_sub_folders = all_sub_folders(3:end);
      %sub_folder_num = length(all_sub_folders);
      
-     if verLessThan('matlab', '22.0')
+     if verLessThan('matlab', '9.13.0')
         total_model_snapshots = length(child_parent_version_sha);
     else
-        total_model_snapshots = height(child_parent_version_sha);;
+        total_model_snapshots = height(child_parent_version_sha);
         
     end
      
