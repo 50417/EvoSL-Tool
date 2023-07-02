@@ -240,7 +240,7 @@ class forked_project():
 			#logging.info("\n==================Processing Project #{}======================".format(count))
 
 			if project_id in processed_project_id or project_id in processed_file_ids:
-				#logging.info("\n==================Already processed : {}======================".format(project_id))
+				logging.info("\n==================Already processed : {}======================".format(project_id))
 				continue
 			
 			FLAG = True

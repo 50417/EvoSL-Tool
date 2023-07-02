@@ -391,20 +391,22 @@ def get_evoSL_sample_project_id(conn):
 def main():
 	#evoSL or EvoSLPlus or evoSLSample database depending on the plot
 	evoSL_database =  ""
+	evoSL_or_evoSLPlus_flag = True
+	ten_plus_model_commits = True
 	# create a database connection
 	conn = create_connection(evoSL_database)
 
-	#Uncomment the  portion you want to create a plot for evoSL or evoSLPlus. 
-	#root_projectids = get_root_ids(conn)
-	#where_clause = " where project_id in ("+",".join(root_projectids)+")"
+	if evoSL_or_evoSLPlus_flag: 
+		root_projectids = get_root_ids(conn)
+		if not ten_plus_model_commits:
+			where_clause = " where project_id in ("+",".join(root_projectids)+")"
+		else:
+			where_clause = " where model_commits>=10 AND project_id in ("+",".join(root_projectids)+")"
+		project_ids = get_project_ids(conn,where_clause)
 
-	#where_clause = " where model_commits>=10 AND project_id in ("+",".join(root_projectids)+")"
-	#project_ids = get_project_ids(conn,where_clause)
-
-
-	#comment below to create a plot for evoSL or evoSLPlus and UNcomment above
-	project_ids = get_evoSL_sample_project_id(conn) #["64223824","476168345","588267715","20451353","68744081","250217878","366359636","337996515","100999374","261484515","305846578","317540119","595154955","287361574","301176100","267839196","13328139","204030363","60685110","468290383","14375685","237132537","355203229","184514360","194490625","312007661","130222499","295851609","124382232","211239358","118747568","334101825","470647234","113453905","54991377","12136324","126338636","296797895","93419327","213199113","546546451","370616572","39600731","389552676","432334495","299664596","789683","47131658","419153598","131173589"]
-	where_clause = " where project_id in ("+",".join(project_ids)+")"
+	else:
+		project_ids = get_evoSL_sample_project_id(conn) #["64223824","476168345","588267715","20451353","68744081","250217878","366359636","337996515","100999374","261484515","305846578","317540119","595154955","287361574","301176100","267839196","13328139","204030363","60685110","468290383","14375685","237132537","355203229","184514360","194490625","312007661","130222499","295851609","124382232","211239358","118747568","334101825","470647234","113453905","54991377","12136324","126338636","296797895","93419327","213199113","546546451","370616572","39600731","389552676","432334495","299664596","789683","47131658","419153598","131173589"]
+		where_clause = " where project_id in ("+",".join(project_ids)+")"
 	
 	
 
