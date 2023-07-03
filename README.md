@@ -2,7 +2,9 @@
 
 EvoSL-Tool is modular framework that can systematically search for Simulink repository without human intervention. The framework can extract project's associated issues, pull request, commit information and forked repositories. The framework can be used to enlarge the [EvoSL](https://zenodo.org/record/7806457) dataset with new Git repositories in the future. 
 
-The tool also mines element (i.e., block,lines,configuration, ports, mask) level changes of Simulink model versions. The tool can be used to extract element level change data of GitHub based Simulink models. 
+The tool also mines element (i.e., block,lines,configuration, ports, mask) level changes of Simulink model versions. The tool can be used to extract element level change data of GitHub based Simulink models.
+
+Find the [EvoSL-Tool](https://github.com/50417/EvoSL-Tool)
 
 -------------------------------
 
@@ -39,6 +41,10 @@ $ conda activate <envname>
 $ pip install -r requirements.txt
 ```
 
+Alternatively, if you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed.
+
+
+
 ## Usage
 
 ### 1. SimMiner
@@ -49,8 +55,10 @@ Change  to `SimMiner` directory
 ```sh
 $ python downloadRepoFromGithub.py --query=<QUERY> --dir=<DIRECTORY_TO_STORE_PROJECTS> --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> --token=<GITHUB_AUTHENTICATION_TOKEN>
 ``` 
-We used query=language:MATLAB and query=simulink
-dbname=evosl.sqlite
+We used 
+- `query=simulink`  OR `query=language:MATLAB` 
+- `dbname=evosl.sqlite`
+The two queries have to run in two different python execution.
 
 Getting Authetication token: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
@@ -79,7 +87,7 @@ In this work, we mined GitHub based simulink project evolution data. But the too
 Change to `project_evolution` folder
 
 #### 2.1 To get commit metadata of root and forked projects 
-- Update the proj_evol.py file 
+- Update the proj_evol.py file, In line 167,
 -- source_database: assign path of the same db as used in SimMiner module
 -- dst_database: Ideally assign same path as source database
 -- is_forked: Set to true when you want to collect forked projects repository. 
@@ -99,7 +107,7 @@ In this work, we mined model element change data of EvoSL projects.
 - Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). 
 - Open Matlab R2019a. [MATLAB Installation]
 - In driver.m
--- Update dependency, project_commit_db, project_location, use_URL in driver.m
+-- Update `dependency=<Model Comparison Utility location>`,`project_commit_db=<EvoSL.sqlite>`, `project_location=<leave as blank if use_URL is set to true>`, `use_URL=<if false, set project location to evoSL's projects(all the project need to unzipped.)>` in driver.m
 - In MATLAB's command window, 
 ```sh
 >> driver
@@ -112,10 +120,12 @@ All data will be stored in database you listed as  project_commit_db.
 
 ## To reproduce numbers presented in the paper.
 
+Use R2022b to reproduce the numbers. 
+
 ### 1. Reproduce numbers of EvoSL_36
 - Download  Analysis Data from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
 -  In the @analyzer/analyzer.m file
--- Update model_evol_db = < path to EvoSL_36_2019a.sqlite >
+-- In line 6, Update model_evol_db = < path to EvoSL_36_2019a.sqlite >
 - Change directory to root of the project
 - In MATLAB command window, run
 ```
@@ -130,40 +140,50 @@ The above will reproduce TABLE V, Figure 9 and  Table VII
 - Change directory to analyzer_py
 - In get_activity_of_project.py, 
 -- Update evoSL_database (database location) as well as relevant boolean flags (i.e. evoSL_or_evoSLPlus_flag, ten_plus_model_commits in main() function
+---- For Figure 6 (a), in line 393 ``evoSL_database=<EvoSL+ location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=False``
+---- For Figure 6 (b), in line 393 ``evoSL_database=<EvoSL location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=False``
+---- For Figure 6 (c), in line 393 ``evoSL_database=<EvoSL location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=True``
+---- For Figure 6 (d), in line 393 ``evoSL_database=<EvoSL 36 location>`` ``evoSL_or_evoSLPlus_flag=False``, ``ten_plus_model_commits=False``
 -- Run 
 ```
 $ python get_activity_of_project.py
 ```
 
-### To reproduce Table III
+### 3. To reproduce Table III
 - Change directory to analyzer_py
 - Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
 - Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
 - Change directory to analyzer_py
 - In get_evolution_distribution.py, 
--- Update database location in main() function 
+-- Update database location in main() function. In line 200,
+`evosl_database = <evosl_v1.sqlite location>`
+`evoslplus_database = <evosl+_v1.sqlite location>`
+`evoslsample_database = <EvoSL_36_2019a.sqlite location>`
 -- Run 
 ```
 $ python get_evolution_distribution.py
 ```
 
-### To reproduce Table V
+### 4. To reproduce Table V
 - Change directory to analyzer_py
 - Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
 - Change directory to analyzer_py
 - In get_evoSL_sample_metrics.py, 
--- Update database location in main() function 
+-- Update database location in main() function. In line 172, 
+`evosl_sample_database = <evolSL_36_2019a.sqlite location>`
 -- Run 
 ```
 $ python get_evoSL_sample_metrics.py
 ```
 
-### To generate Figure 5 
+### 5. To generate Figure 5 
 - Change directory to analyzer_py
 - Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
 - Change directory to analyzer_py
 - In get_and_plot_cumulative_metric_distribution.py, 
--- Update database location in main() function 
+-- Update database location in main() function. In line 152,
+`our_db = <evoSL.sqlite location>`
+`raw_db = <evoSL+.sqlite location>`
 -- Run 
 ```
 $ python get_and_plot_cumulative_metric_distribution.py
