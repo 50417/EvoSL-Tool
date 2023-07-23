@@ -149,14 +149,15 @@ The above will reproduce TABLE V, Figure 9 and  Table VII
 - Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
 - Change directory to analyzer_py
 - In get_activity_of_project.py, 
+```
 -- Update evoSL_database (database location) as well as relevant boolean flags (i.e. evoSL_or_evoSLPlus_flag, ten_plus_model_commits in main() function
 ---- For Figure 6 (a), in line 393 ``evoSL_database=<EvoSL+ location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=False``
 ---- For Figure 6 (b), in line 393 ``evoSL_database=<EvoSL location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=False``
 ---- For Figure 6 (c), in line 393 ``evoSL_database=<EvoSL location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=True``
 ---- For Figure 6 (d), in line 393 ``evoSL_database=<EvoSL 36 location>`` ``evoSL_or_evoSLPlus_flag=False``, ``ten_plus_model_commits=False``
 -- Run 
-```
 $ python get_activity_of_project.py
+
 ```
 
 ### 3. To reproduce Table III
