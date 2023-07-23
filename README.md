@@ -180,10 +180,10 @@ $ python get_evolution_distribution.py
 - Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
 - Change directory to analyzer_py
 - In get_evoSL_sample_metrics.py, 
+```
 -- Update database location in main() function. In line 172, 
 `evosl_sample_database = <evolSL_36_2019a.sqlite location>`
 -- Run 
-```
 $ python get_evoSL_sample_metrics.py
 ```
 
@@ -192,11 +192,11 @@ $ python get_evoSL_sample_metrics.py
 - Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
 - Change directory to analyzer_py
 - In get_and_plot_cumulative_metric_distribution.py, 
+```
 -- Update database location in main() function. In line 152,
 `our_db = <evoSL.sqlite location>`
 `raw_db = <evoSL+.sqlite location>`
 -- Run 
-```
 $ python get_and_plot_cumulative_metric_distribution.py
 ```
 
