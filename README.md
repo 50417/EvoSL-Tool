@@ -166,12 +166,12 @@ $ python get_activity_of_project.py
 - Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
 - Change directory to analyzer_py
 - In get_evolution_distribution.py, 
+```
 -- Update database location in main() function. In line 200,
 `evosl_database = <evosl_v1.sqlite location>`
 `evoslplus_database = <evosl+_v1.sqlite location>`
 `evoslsample_database = <EvoSL_36_2019a.sqlite location>`
 -- Run 
-```
 $ python get_evolution_distribution.py
 ```
 
