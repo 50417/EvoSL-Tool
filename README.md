@@ -87,7 +87,7 @@ In this work, we mined Simulink project's evolution data. But the tool can be us
 Change to `project_evolution` folder
 
 #### 2.1 To get commit metadata of root and forked projects 
-- Update the proj_evol.py file, In line 167,
+- Update the project_evol.py file, In line 169,
 -- source_database: assign path of the same db as used in EvoSL-Miner module
 -- dst_database: Ideally assign same path as source database
 -- is_forked: Set to true when you want to collect forked projects repository. 

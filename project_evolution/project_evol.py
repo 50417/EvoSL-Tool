@@ -166,8 +166,8 @@ def main():
 	start = time.time()
 	is_forked = True
 	# Source and Destination can be same database
-	source_database =""
-	dst_database = ""
+	source_database ="<PATH TO EvoSL.sqlite>"
+	dst_database = "<PATH TO EvoSL.sqlite>"
 
 	path = "workdir"
 	dest_project_database_controller = Project_commits_info_Controller(dst_database)
