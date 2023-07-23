@@ -87,7 +87,7 @@ In this work, we mined Simulink project's evolution data. But the tool can be us
 Change to `project_evolution` folder
 
 #### 2.1 To get commit metadata of root and forked projects 
-* Update the project_evol.py file, In line 169, <br>
+* Update the project_evol.py file, In line 167-170, <br>
 
 ```
 source_database: assign path of the same db as used in EvoSL-Miner module 
@@ -109,8 +109,11 @@ In this work, we mined model element change data of EvoSL projects.
 - Download and extract [Model Comparision Utility] 
 - Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). 
 - Open Matlab R2019a. [MATLAB Installation]
-- In driver.m
--- Update `dependency=<Model Comparison Utility location>`,`project_commit_db=<EvoSL.sqlite>`, `project_location=<leave as blank if use_URL is set to true>`, `use_URL=<if false, set project location to evoSL's projects(all the project need to unzipped.)>` in driver.m
+- In driver.m <nr>
+-- Update `dependency=<Model Comparison Utility location>`
+	`project_commit_db=<EvoSL.sqlite>`
+	`project_location=<leave as blank if use_URL is set to true>`
+		`use_URL=<if false, set project location to evoSL's projects(all the project need to unzipped.)>`
 - In MATLAB's command window, 
 ```sh
 >> driver
