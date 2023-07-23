@@ -110,10 +110,14 @@ In this work, we mined model element change data of EvoSL projects.
 - Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). 
 - Open Matlab R2019a. [MATLAB Installation]
 - In driver.m <nr>
--- Update `dependency=<Model Comparison Utility location>`
-	`project_commit_db=<EvoSL.sqlite>`
-	`project_location=<leave as blank if use_URL is set to true>`
-		`use_URL=<if false, set project location to evoSL's projects(all the project need to unzipped.)>`
+-- Update 
+```
+dependency=<Model Comparison Utility location>
+project_commit_db=<EvoSL.sqlite>
+project_location=<leave as blank if use_URL is set to true>
+		use_URL=<if false, set project_location to evoSL's projects(all the project need to unzipped.)>
+```
+
 - In MATLAB's command window, 
 ```sh
 >> driver
