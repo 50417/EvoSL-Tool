@@ -92,8 +92,8 @@ Change to `project_evolution` folder
 $ python  project_evol.py --src_db=<PATH TO DB with GitHub URLS>
 ```
 
-NOTE: You need to mine root projects' commit first (i.e. dont include -f). To avoid extracting duplicate commit metadata, the tool only tries to extract commit of forked projects since when it was forked. 
-To get forked projects
+NOTE: You need to mine root projects' commit first (i.e. dont include -f). To avoid extracting duplicate commit metadata, the tool only tries to extract commit of forked projects since when it was forked. <br>
+To get forked projects' evolution data,
 ```
 $ python  project_evol.py --src_db=<PATH TO DB with GitHub URLS> -f
 ```
