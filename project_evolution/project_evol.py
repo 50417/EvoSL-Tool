@@ -7,8 +7,9 @@ import os, shutil
 import time
 from datetime import datetime
 from pydriller import GitRepository
+import argparse
 
-sys.path.insert(1, '../SimMiner/DAO')
+sys.path.insert(1, '../EvoSL-Miner/DAO')
 from subprocess import Popen, PIPE
 
 from Repo_DAO import SimulinkRepoInfoController
@@ -162,12 +163,8 @@ def get_most_recent_hash(url):
 	p = Popen(['git', 'ls-remote', url, '|', 'grep', 'HEAD'], stdout=PIPE)
 	output = p.communicate()[0].decode("utf-8")
 	return output.split("\t")[0]
-def main():
+def main(is_forked,source_database,dst_database):
 	start = time.time()
-	is_forked = True
-	# Source and Destination can be same database
-	source_database ="<PATH TO EvoSL.sqlite>"
-	dst_database = "<PATH TO EvoSL.sqlite>"
 
 	path = "workdir"
 	dest_project_database_controller = Project_commits_info_Controller(dst_database)
@@ -179,11 +176,14 @@ def main():
 	conn = create_connection(source_database)
 	dst_conn = create_connection(dst_database)
 
-	to_update_version_sha = dst_database.replace('.sqlite','')
+
+	to_update_version_sha = dst_database #.replace('.sqlite','')
 	databaseHandler = SimulinkRepoInfoController(to_update_version_sha)
+
 
 	with dst_conn:
 		processed_id,processed_mdl_name= get_id_name(dst_conn)
+
 	with conn:
 		id_urls = get_repo_id_urls(conn,is_forked)
 		for id_url in id_urls:
@@ -238,4 +238,21 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	parser = argparse.ArgumentParser(description='Get argument for downloading')
+	parser.add_argument('-s', '--src_db', dest="src_db", type=str,
+						help='Source database (which has GitHub URLs)')
+	parser.add_argument('-d', '--dst_db', dest="dst_db", type=str,
+						help='Destination database')
+	parser.add_argument('-f', '--forked', dest="forked_flag", default=False,action='store_true',
+					help='Boolean value to determine to collect evolution data from forked project | Dont include it for root projects')
+
+	args = parser.parse_args()
+
+	source_database = args.src_db
+	dst_database = args.dst_db # BASIC AUTH OR OAUTH 5000 requests per hour ||  30 requests per minute for using SEARCH API
+	if dst_database is None: 
+		dst_database = source_database
+	is_forked = args.forked_flag
+
+
+	main(is_forked,source_database,dst_database)

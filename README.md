@@ -2,7 +2,7 @@
 
 EvoSL-Tool is modular framework that can systematically search for Simulink repositories without human intervention. The framework can extract projects' associated issues, pull request, commit information and forked repositories. The framework can be used to enlarge the [EvoSL](https://zenodo.org/record/7806457) dataset with new Git repositories in the future. 
 
-The tool also mines element (i.e., block, lines, configuration, ports, mask) level changes of Simulink model versions. The tool can be used to extract element level change data of Simulink models that are stored and versioned on GitHub.
+The tool also mines element (i.e., blocks, lines, configuration, ports, mask) level changes of Simulink model versions. The tool can be used to extract element level change data of Simulink models that are stored and versioned on GitHub.
 
 The EvoSL-Tool can be obtained [here](https://zenodo.org/record/8111020)
 
@@ -87,20 +87,17 @@ In this work, we mined Simulink project's evolution data. But the tool can be us
 Change to `project_evolution` folder
 
 #### 2.1 To get commit metadata of root and forked projects 
-* Update the project_evol.py file, In line 167-170, <br>
 
 ```
-source_database: assign path of the same db as used in EvoSL-Miner module 
-dst_database: Ideally assign same path as source database
-is_forked: Set to true when you want to collect forked projects repository. 
+$ python  project_evol.py --src_db=<PATH TO DB with GitHub URLS>
 ```
 
-NOTE: You need to mine root projects' commit first (i.e. set **is_forked=False**). To avoid extracting duplicate commit metadata, the tool only tries to extract commit of forked projects since when it was forked. 
+NOTE: You need to mine root projects' commit first (i.e. dont include -f). To avoid extracting duplicate commit metadata, the tool only tries to extract commit of forked projects since when it was forked. 
+To get forked projects
+```
+$ python  project_evol.py --src_db=<PATH TO DB with GitHub URLS> -f
+```
 
-- run 
-```
-$ python project_evol.py
-```
 ### 3. Compare Model Snapshot
 The tool extracts Simulink model element data of a GitHub Project over the project lifecycle. The tool leverages [Model Comparision Utility] and [Project Evolution]. The tool can be used to extract Simulink model element change data of any Simulink project that are stored and versioned on GitHub.
 
@@ -109,7 +106,7 @@ In this work, we mined model element change data of EvoSL projects.
 - Download and extract [Model Comparision Utility] 
 - Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). 
 - Open Matlab R2019a. [MATLAB Installation]
-- In driver.m <nr>
+- In driver.m <br>
 -- Update 
 ```
 dependency=<Model Comparison Utility location>
@@ -118,7 +115,7 @@ project_location=<leave as blank if use_URL is set to true>
 		use_URL=<if false, set project_location to evoSL's projects(all the project need to unzipped.)>
 ```
 
-- In MATLAB's command window, 
+- In MATLAB's command window, run 
 ```sh
 >> driver
 ```
