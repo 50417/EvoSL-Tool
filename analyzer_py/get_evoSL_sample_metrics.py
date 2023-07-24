@@ -167,9 +167,9 @@ def get_evoSL_sample_project_id(conn):
 	return project_ids
 
 
-def main():
+def get_sample_metrics(evosl_sample_database):
 	start = time.time()
-	evosl_sample_database = ""
+	
 	
 	# create a database connection
 	conn = create_connection(evosl_sample_database)
@@ -253,4 +253,7 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	evosl_sample_database=""
+	get_sample_metrics(evosl_sample_database)
+
+	

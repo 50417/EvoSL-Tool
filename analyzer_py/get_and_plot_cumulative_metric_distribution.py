@@ -86,7 +86,7 @@ def get_outliers_range(sorted_lst):
 	q1_idx = (n_len +1)//4
 	q3_idx = ((n_len +1)//4) * 3
 
-	print(sorted_lst[median_idx])
+	#print(sorted_lst[median_idx])
 
 	q1 = sorted_lst[q1_idx]
 	q3 = sorted_lst[q3_idx]
@@ -147,11 +147,8 @@ def get_project_count_lt_1modelcommits(conn,project_ids):
 def get_percentage(num,deno):
 	return num/deno*100
 
-def main(): 
-	# EvoSL
-	our_db = ""
-	#EvoSL+ 
-	raw_db = ""
+def plot_cumulative(our_db,raw_db): 
+	
 	fig = plt.figure()
 	ax1 = fig.add_subplot(111, label="1")
 	ax2 = fig.add_subplot(111, label="1", frame_on=False)
@@ -224,8 +221,10 @@ def main():
 	#ax2.tick_params(axis='y', colors=ax2_color)
 	ax2.axis(xmin=0,xmax=180,ymin=0, ymax=1.0)
 	ax2.legend(loc=7,labelcolor='linecolor',prop={'size': 11}) # 4 =lower right	
-	plt.show()
+	plt.show(block=False)
 
 	 
-
-main()
+if __name__ == '__main__':
+	evoSL =""
+	evoSLPlus =""
+	plot_cumulative(evoSL,evoSLPlus)

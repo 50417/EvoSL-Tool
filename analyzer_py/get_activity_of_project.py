@@ -312,7 +312,7 @@ def plot(data_lst,xlabel="Project life time", ylabel=None,figurename = None):
 	#ax.legend(bars, data_lst.keys())
 
 
-def plot_all(data_lst,xlabel="Project life time", ylabel=None,figurename = None):
+def plot_all(data_lst,xlabel="Project life time", ylabel=None,figurename = None,figTitle=None):
 
 	# Idea and Logic : https://stackoverflow.com/questions/14270391/python-matplotlib-multiple-bars/14270539
 	xval = [1,2,3,4,5,6,7,8,9,10]
@@ -355,7 +355,7 @@ def plot_all(data_lst,xlabel="Project life time", ylabel=None,figurename = None)
 	figure = plt.gcf()
 
 	figure.set_size_inches(8, 3)
-
+	plt.title(figTitle)
 	plt.savefig(figurename)
 	plt.show()
 
@@ -388,11 +388,8 @@ def get_evoSL_sample_project_id(conn):
 
 
 
-def main():
-	#evoSL or EvoSLPlus or evoSLSample database depending on the plot
-	evoSL_database =  ""
-	evoSL_or_evoSLPlus_flag = True
-	ten_plus_model_commits = True
+def plot_activity(evoSL_database,evoSL_or_evoSLPlus_flag,ten_plus_model_commits,figTitle):
+	
 	# create a database connection
 	conn = create_connection(evoSL_database)
 
@@ -452,7 +449,7 @@ def main():
 		"Models under development":avg_model_development_dist
 	}
 
-	plot_all(project_lifecycles,xlabel="", ylabel=None,figurename = "all_project_evolution.pdf")
+	plot_all(project_lifecycles,xlabel="", ylabel=None,figurename = "all_project_evolution.pdf",figTitle=figTitle)
 	#print(projects_commit_dist)
 		#get_model_commit_distribution(conn,id)
 		#get_model_commit_distribution(conn,id)
@@ -463,4 +460,8 @@ def main():
 
 if __name__ == '__main__':
 	#print(get_average_by_col([[10,2,3,4],[1,2,3,4],[1,2,3,4]]))
-	main()
+	evoSL_database =  ""
+	evoSL_or_evoSLPlus_flag = True
+	ten_plus_model_commits = True
+	figTitle = ""
+	plot_activity(evoSL_database,evoSL_or_evoSLPlus_flag,ten_plus_model_commits,figTitle)

@@ -130,7 +130,7 @@ All data will be stored in database you listed as  project_commit_db.
 Use R2022b to reproduce the numbers. 
 
 ### 1. Reproduce numbers of EvoSL_36
-- Download  Analysis Data from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
+- Download  Analysis Data from [EvoSL-Figshare]
 -  In the @analyzer/analyzer.m file
 -- In line 6, Update model_evol_db = < path to EvoSL_36_2019a.sqlite >
 - Change directory to root of the project
@@ -139,63 +139,19 @@ Use R2022b to reproduce the numbers.
 >> x = analyzer();
 >> x.plot_and_print_results();
 ```
-The above will reproduce TABLE V, Figure 9 and  Table VII
+The above will reproduce TABLE V, Figure 9 and  Table VII, Figure 5
 
-### 2. To generate Figure 6.
-- Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
+### 2. To generate Figure 6,Table III, Table V and Figure 5
+- Download [EvoSL-Figshare]
 - Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
 - Change directory to analyzer_py
-- In get_activity_of_project.py, 
+- Update the .EvoSLenv with respective SQLite files. 
+- Run 
 ```
--- Update evoSL_database (database location) as well as relevant boolean flags (i.e. evoSL_or_evoSLPlus_flag, ten_plus_model_commits in main() function
----- For Figure 6 (a), in line 393 ``evoSL_database=<EvoSL+ location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=False``
----- For Figure 6 (b), in line 393 ``evoSL_database=<EvoSL location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=False``
----- For Figure 6 (c), in line 393 ``evoSL_database=<EvoSL location>`` ``evoSL_or_evoSLPlus_flag=True``, ``ten_plus_model_commits=True``
----- For Figure 6 (d), in line 393 ``evoSL_database=<EvoSL 36 location>`` ``evoSL_or_evoSLPlus_flag=False``, ``ten_plus_model_commits=False``
--- Run 
-$ python get_activity_of_project.py
+$ python reproduce_numbers.py
+```
+NOTE: Please close the figure to view next figure. 
 
-```
-
-### 3. To reproduce Table III
-- Change directory to analyzer_py
-- Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
-- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
-- Change directory to analyzer_py
-- In get_evolution_distribution.py, 
-```
--- Update database location in main() function. In line 200,
-`evosl_database = <evosl_v1.sqlite location>`
-`evoslplus_database = <evosl+_v1.sqlite location>`
-`evoslsample_database = <EvoSL_36_2019a.sqlite location>`
--- Run 
-$ python get_evolution_distribution.py
-```
-
-### 4. To reproduce Table V
-- Change directory to analyzer_py
-- Download EvoSL_36_2019a.sqlite from [FigShare](https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/1) 
-- Change directory to analyzer_py
-- In get_evoSL_sample_metrics.py, 
-```
--- Update database location in main() function. In line 172, 
-`evosl_sample_database = <evolSL_36_2019a.sqlite location>`
--- Run 
-$ python get_evoSL_sample_metrics.py
-```
-
-### 5. To generate Figure 5 
-- Change directory to analyzer_py
-- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
-- Change directory to analyzer_py
-- In get_and_plot_cumulative_metric_distribution.py, 
-```
--- Update database location in main() function. In line 152,
-`our_db = <evoSL.sqlite location>`
-`raw_db = <evoSL+.sqlite location>`
--- Run 
-$ python get_and_plot_cumulative_metric_distribution.py
-```
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
    [Anaconda]: <https://www.anaconda.com/>
@@ -205,3 +161,4 @@ $ python get_and_plot_cumulative_metric_distribution.py
    [Model Comparision Utility]: <https://zenodo.org/record/6410073#.Y-VQINLMK-Y>
    [Repository Mining for Changes in Simulink Models]: <https://ieeexplore.ieee.org/document/9592466>
    [MATLAB Installation]: <https://github.com/50417/EvoSL-Tool/tree/main/MATLABConfiguration.md>
+   [EvoSL-Figshare]: <https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/2>

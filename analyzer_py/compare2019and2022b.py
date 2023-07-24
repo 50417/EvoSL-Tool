@@ -49,15 +49,16 @@ def get_all_rows(conn,table):
 
 def compare(old, new,project_id ):
 	inold_not_inNew = old.difference(new)
-	print("2019 IONLY")
+	
 	nine = len(inold_not_inNew)
-
+	print("Changes in 2019 ONLY:",nine)
 	with open("2019-block.csv",'a') as f:
 		for ele in inold_not_inNew: 
 			f.write(str(project_id)+","+ele+"\n")
-	print("2022 ONLY")
+	
 	innew_not_in_old = new.difference(old)
 	twenty = len(innew_not_in_old)
+	print("changes in 2022 ONLY",twenty)
 	with open("2022-block.csv",'a') as f:
 		for ele in innew_not_in_old: 
 			f.write(str(project_id)+","+ele+"\n")
@@ -67,9 +68,8 @@ def compare(old, new,project_id ):
 
 
 
-def main():
+def compare_two_matlab_ver(db):
 	#evoSL_2019avs2022b_5sampleProjects.sqlite
-	db = "" 
 	conn = create_connection(db)
 
 	change_2022 = get_all_rows(conn,"model_element_changes_22b")
@@ -104,10 +104,11 @@ def main():
 	print("Percentage of 2022b  element changes only on 2022b: %f"%round(only_in_22/total_in_22*100,2))
 	print("Percentage of non overlapping  element changes out of total number of changes in both versions: %f"%round((only_in_19+only_in_22)/(total_in_19+total_in_22)*100,2))
 
+if __name__ == '__main__':
+	db = ""
+	compare_two_matlab_ver(db)
 
 
 
 
 
-
-main()

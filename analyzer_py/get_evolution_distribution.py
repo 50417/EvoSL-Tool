@@ -195,11 +195,8 @@ def get_evoSL_sample_project_id(conn):
 
 #sql = "select cast(Model_commits as float)/cast(Total_number_of_commits as float)*100 per from Project_Commit_Summary order by per"
 
-def main():
+def get_evol_distribution(evosl_database,evoslplus_database,evoslsample_database):
 	start = time.time()
-	evosl_database = ""
-	evoslplus_database = ""
-	evoslsample_database = ""
 
 	# create a database connection
 	plus_conn = create_connection(evoslplus_database)
@@ -310,12 +307,5 @@ def main():
 	
 	
 
-	
-
-	
-
-
-
-
 if __name__ == '__main__':
-	main()
+	get_evol_distribution(evosl_database,evoslplus_database,evoslsample_database)
