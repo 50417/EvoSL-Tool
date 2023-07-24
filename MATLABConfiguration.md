@@ -1,6 +1,32 @@
+
 # MATLAB Simulink Installation
 
-````
+If you or your instituition have/provide MATLAB license. You can download [MATLAB](https://www.mathworks.com/downloads/) with the following setup. 
+
+## Minimal MATLAB Setup to run Compare Model Snapshot Component and analysis (i.e. reproduce numbers)
+```
+-----------------------------------------------------------------------------------------------------
+MATLAB Version: 9.6.0.1472908 (R2019a) Update 9
+Operating System: macOS  Version: 13.4.1 ProductVersionExtra:(c) Build: 22F770820d 
+Java Version: Java 1.8.0_181-b13 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+-----------------------------------------------------------------------------------------------------
+MATLAB                                                Version 9.6         (R2019a)
+Simulink                                              Version 9.3         (R2019a)
+Database Toolbox                                      Version 9.1         (R2019a)
+
+```
+
+```
+-----------------------------------------------------------------------------------------------------
+MATLAB Version: 9.13.0.2193358 (R2022b) Update 5
+Operating System: macOS  Version: 13.4.1 ProductVersionExtra:(c) Build: 22F770820d 
+Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+-----------------------------------------------------------------------------------------------------
+MATLAB                                                Version 9.13        (R2022b)
+Simulink                                              Version 10.6        (R2022b)
+Database Toolbox                                      Version 10.4        (R2022b)
+```
+```
 -----------------------------------------------------------------------------------------------------
 MATLAB Version: 9.6.0.1472908 (R2019a) Update 9
 Operating System: Linux 5.4.0-84-generic #94~18.04.1-Ubuntu SMP Thu Aug 26 23:17:46 UTC 2021 x86_64

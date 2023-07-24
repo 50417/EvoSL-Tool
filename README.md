@@ -101,45 +101,43 @@ $ python  project_evol.py --src_db=<PATH TO DB with GitHub URLS> -f
 ### 3. Compare Model Snapshot
 The tool extracts Simulink model element data of a GitHub Project over the project lifecycle. The tool leverages [Model Comparision Utility] and [Project Evolution]. The tool can be used to extract Simulink model element change data of any Simulink project that are stored and versioned on GitHub.
 
-Change to the root directory of the project.
-In this work, we mined model element change data of EvoSL projects. 
-- Download and extract [Model Comparision Utility] 
-- Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). 
-- Open Matlab R2019a. [MATLAB Installation]
-- In driver.m <br>
--- Update 
+Refer to [MATLAB Installation]
+
+Change to root directory of the project.
+In this work, we mined model element change data of EvoSL projects.  <br>
+- Download and extract [Model Comparision Utility] <br>
+- Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). <br>
+- Open Matlab <br>
+- To directly clone the project from the source and extract model element change, run the following in MATLAB command window.<br>
 ```
-dependency=<Model Comparison Utility location>
-project_commit_db=<EvoSL.sqlite>
-project_location=<leave as blank if use_URL is set to true>
-		use_URL=<if false, set project_location to evoSL's projects(all the project need to unzipped.)>
+driver(<PATH to Model Comparision Utility (extracted)>,'<PATH to database which has data from project evolution component>',true,'')
 ```
 
-- In MATLAB's command window, run 
-```sh
->> driver
+- To use the already cloned project in your local machine and extract model element change, run the following in MATLAB command window.<br>
+```
+driver(<PATH to Model Comparision Utility (extracted)>,'<PATH to database which has data from project evolution component>',false,<PATH TO THE folder which contains all extracted project folders>)
 ```
 
-NOTE: `use_URL = true` will clone the project from GitHub and disregard project_location. 
+
+NOTE: `use_URL = true` (i.e. the third argument in above script) will clone the project from GitHub and disregard project_location (i.e. the fourth argument). 
 EvoSL already has Model_Element_Canges table that has all the element-level changes of all EvoSL projects. 
 
-All data will be stored in database you listed as  project_commit_db. 
+All data will be stored in database you listed in second argument. 
 
 ## To reproduce numbers presented in the paper.
-
-Use R2022b to reproduce the numbers. 
+Install [MATLAB Installation]
+We used both R2019a or R2022b to reproduce the numbers. The code will run on MATLAB versions with minimal configuration on MATLAB R2019a or later. 
 
 ### 1. Reproduce numbers of EvoSL_36
-- Download  Analysis Data from [EvoSL-Figshare]
--  In the @analyzer/analyzer.m file
--- In line 6, Update model_evol_db = < path to EvoSL_36_2019a.sqlite >
-- Change directory to root of the project
+
+- EvoSL_36_2019a.sqlite  can be download  [EvoSL-Figshare] <br>
+- Open MATLAB <br>
+- Navigate to the root of the EvoSL-tool from MATLAB command window <br>
 - In MATLAB command window, run
 ```
->> x = analyzer();
->> x.plot_and_print_results();
+>> reproduce_numbers_and_plots(<PATH TO EvoSL_36_2019a.sqlite>)
 ```
-The above will reproduce TABLE V, Figure 9 and  Table VII, Figure 5
+The above will reproduce Figure 9 and  Table VII
 
 ### 2. To generate Figure 6,Table III, Table V and Figure 5
 - Download [EvoSL-Figshare]

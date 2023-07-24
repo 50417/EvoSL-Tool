@@ -12,9 +12,10 @@ classdef analyzer
     end
     
     methods
-        function obj = analyzer()
+        function obj = analyzer(evosl36_db)
             %ANALYZER Construct an instance of this class
             %   Detailed explanation goes here
+            obj.model_evol_db = evosl36_db;
             obj.conn = utils.connect_db(obj.model_evol_db);
             %obj.table_name = "Model_changes_filtered";
             obj.logfilename = strcat('analyzer_log',datestr(now, 'dd-mm-yy-HH-MM-SS'),'.txt');
