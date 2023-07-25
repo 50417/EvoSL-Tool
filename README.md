@@ -1,10 +1,10 @@
 # EvoSL-Tool
 
-EvoSL-Tool is modular framework that can systematically search for Simulink repositories without human intervention. The framework can extract projects' associated issues, pull request, commit information and forked repositories. The framework can be used to enlarge the [EvoSL](https://zenodo.org/record/7806457) dataset with new Git repositories in the future. 
+EvoSL-Tool is modular framework that can systematically search for Simulink repositories without human intervention. The framework can extract projects' associated issues, pull request, commit information and forked repositories. The framework can be used to enlarge the [EvoSL](https://zenodo.org/record/7806456) dataset with new Git repositories in the future. 
 
 The tool also mines element (i.e., blocks, lines, configuration, ports, mask) level changes of Simulink model versions. The tool can be used to extract element level change data of Simulink models that are stored and versioned on GitHub.
 
-The EvoSL-Tool can be obtained [here](https://zenodo.org/record/8111020)
+The EvoSL-Tool can be obtained [here](https://zenodo.org/record/8111019)
 
 -------------------------------
 
@@ -106,7 +106,7 @@ Refer to [MATLAB Installation]
 Change to root directory of the project.
 In this work, we mined model element change data of EvoSL projects.  <br>
 - Download and extract [Model Comparision Utility] <br>
-- Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806457). <br>
+- Download project evolution data (EvoSL_v1.sqlite) from [EvoSL](https://zenodo.org/record/7806456). <br>
 - Open Matlab <br>
 - To directly clone the project from the source and extract model element change, run the following in MATLAB command window.<br>
 ```
@@ -141,7 +141,7 @@ The above will reproduce Figure 9 and  Table VII
 
 ### 2. To generate Figure 6,Table III, Table V and Figure 5
 - Download [EvoSL-Figshare]
-- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806457)
+- Download EvoSL_v1.sqlite and EvoSL+_v1.sqlite from [Zenodo](https://zenodo.org/record/7806456)
 - Change directory to analyzer_py
 - Update the .EvoSLenv with respective SQLite files. 
 - Run 
