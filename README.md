@@ -159,4 +159,4 @@ NOTE: Please close the figure to view next figure.
    [Model Comparision Utility]: <https://zenodo.org/record/6410073#.Y-VQINLMK-Y>
    [Repository Mining for Changes in Simulink Models]: <https://ieeexplore.ieee.org/document/9592466>
    [MATLAB Installation]: <https://github.com/50417/EvoSL-Tool/tree/main/MATLABConfiguration.md>
-   [EvoSL-Figshare]: <https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812/2>
+   [EvoSL-Figshare]: <https://figshare.com/articles/dataset/EvoSL_A_Large_Open-Source_Corpus_of_Changes_in_Simulink_Models_Projects_Analysis_Data_/22298812>
