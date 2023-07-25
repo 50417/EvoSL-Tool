@@ -2,7 +2,11 @@ function driver(dependenc,project_commit_db,use_URL,project_location )
     %dependenc = ''; % Download and extract https://zenodo.org/record/6410073#.ZDX-JNLMK-Z
     %project_commit_db = ''; % Db where all the metadata is collected. OR use EvoSL.sqlite
     %project_location = ''; % where all git projects are stored OR EvoSL project directory
-    proj_commit_snapshot_folder = "/tmp/proj_commit_snapshot_folder";
+    if isunix
+        proj_commit_snapshot_folder = "/tmp/proj_commit_snapshot_folder";
+    else
+        proj_commit_snapshot_folder = "proj_commit_snapshot_folder";
+    end
     %use_URL = true;
     
     

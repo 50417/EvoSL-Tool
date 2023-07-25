@@ -14,7 +14,12 @@ function [list_of_diff_files] = get_git_diff(obj,before_sha,after_sha,project_lo
     % git diff-tree behaviours is different from git diff / For example
     % --diff-filter=R is not recognized by diff-tree . avoid R(rename) and
     % T (type changed)
-   command = strcat("TERM=ansi git --no-pager diff -r --name-only ",before_sha," ",after_sha," --diff-filter=ACDMUXB");
+    if isunix
+        command = strcat("TERM=ansi git --no-pager diff -r --name-only ",before_sha," ",after_sha," --diff-filter=ACDMUXB");
+    else
+        command = strcat("git --no-pager diff -r --name-only ",before_sha," ",after_sha," --diff-filter=ACDMUXB");
+    
+    end
     obj.WriteLog(sprintf("Getting diff using command : %s",command));
     
     cd(project_loc);
