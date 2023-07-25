@@ -41,7 +41,7 @@ $ conda activate <envname>
 $ pip install -r requirements.txt
 ```
 
-Alternatively, if you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed.
+Alternatively, create a virtual environment without conda using `python3 -m venv path/to/venv`. Then use `path/to/venv/bin/python` and `path/to/venv/bin/pip`. Make sure you have python3-full installed.
 
 
 
@@ -78,7 +78,9 @@ $ python get_issues_pr.py --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> --token=<
 Use the same database that you use to mine the projects. 
 
 Adding -f flag in the get_forked_project.py and get_issues_pr.py will get the metadata for forked projects. Otherwise only root is processed. 
-
+```sh
+$ python get_issues_pr.py --dbname=<DATABASE_TO_STORE_COMMIT_METADATA> -f --token=<GITHUB_AUTHENTICATION_TOKEN>
+``` 
 ### 2. Project Evolution
 The tool extracts project and model commit history of GitHub Projects. The tool leverages the mined data from [EvoSL-Miner]. The mined data consist of GitHub urls which this tool uses to extract project/model commit information. All project evolution data is stored in SQLite database.
 
@@ -148,7 +150,7 @@ The above will reproduce Figure 9 and  Table VII
 ```
 $ python reproduce_numbers.py
 ```
-NOTE: Please close the figure to view next figure. 
+## NOTE: Please close the figure to view next figure. Otherwise the script will keep waiting for you to interact with the figure
 
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)

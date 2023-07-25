@@ -25,6 +25,7 @@ function  plot_bubblechart(category,category_percentage)
     end
     explode = ones(1,length(category_percentage));
     explode(length(category_percentage)-1) = 0;
+    new_category_order = string(new_category_order);
     pie(new_order,explode,new_category_order);
     colormap('gray');
 end
