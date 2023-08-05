@@ -154,10 +154,10 @@ def plot_cumulative(our_db,raw_db):
 	ax2 = fig.add_subplot(111, label="1", frame_on=False)
 
 	markers_choices = [["p","+","s","x"],["p","+","s","x"]]
-	label_suffix = ["EvoSL+",'EvoSL']
-	linestyles = ['dashed','solid']
+	label_suffix = ['EvoSL']#["EvoSL+",'EvoSL']
+	linestyles = ['solid']#['dashed','solid']
 	cnt = 0 
-	for db in [raw_db,our_db]:
+	for db in [our_db]:#[raw_db,our_db]:
 		a_conn = create_connection(db) 
 		project_ids = get_root_ids(a_conn)
 		marker_choice = markers_choices[cnt]

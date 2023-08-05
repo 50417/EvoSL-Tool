@@ -16,7 +16,7 @@ print("Showing discrepancies in number of element changes between MATLAB version
 compare_two_matlab_ver(evosl_compare)
 print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 
-plot_activity(evosl_plus,evoSL_or_evoSLPlus_flag=True,ten_plus_model_commits=False,figTitle="6(a)")
+#plot_activity(evosl_plus,evoSL_or_evoSLPlus_flag=True,ten_plus_model_commits=False,figTitle="6(a)")
 plot_activity(evosl,evoSL_or_evoSLPlus_flag=True,ten_plus_model_commits=False,figTitle="6(b)")
 plot_activity(evosl,evoSL_or_evoSLPlus_flag=True,ten_plus_model_commits=True,figTitle="6(c)")
 plot_activity(evosl_36,evoSL_or_evoSLPlus_flag=False,ten_plus_model_commits=False,figTitle="6(d)")

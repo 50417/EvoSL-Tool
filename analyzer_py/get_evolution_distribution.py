@@ -199,6 +199,7 @@ def get_evol_distribution(evosl_database,evoslplus_database,evoslsample_database
 	start = time.time()
 
 	# create a database connection
+	'''
 	plus_conn = create_connection(evoslplus_database)
 
 	#To get only root projects information. Comment the where clause to consider everything
@@ -223,10 +224,10 @@ def get_evol_distribution(evosl_database,evoslplus_database,evoslsample_database
 	print("Model commits in %&"+ plus_model_commits_per)
 	plus_model_author_per = calculate_quartiles(get_model_author_per(plus_conn,plus_where_clause))
 	print("Model authors in %&"+ plus_model_author_per)
-
+	'''
 
 	print("=======================================================")
-
+	
 	# create a database connection
 	conn = create_connection(evosl_database)
 
@@ -286,6 +287,7 @@ def get_evol_distribution(evosl_database,evoslplus_database,evoslsample_database
 
 	print("=======================================================")
 
+	'''
 	print("Project Metric & Min. & Max. & Mean& Median & Std. Dev & Min. & Max. & Mean& Median & Std. Dev")
 
 	print("Commits &"+ plus_no_of_commits+"&"+ evosl_no_of_commits+"&"+ sample_no_of_commits + "\\\\")
@@ -303,6 +305,24 @@ def get_evol_distribution(evosl_database,evoslplus_database,evoslsample_database
 	print("Authors\\textsubscript{MS} [\%] & "+ plus_model_author_per+"&"+evosl_model_author_per+"&"+sample_model_author_per+ "\\\\")
 
 	print("Durations [days] &" + plus_lifetime_in_days+"&"+evosl_lifetime_in_days+"&"+sample_lifetime_in_days+ "\\\\")
+	'''
+	print("Project Metric & Min. & Max. & Mean& Median & Std. Dev")
+
+	print("Commits &"+ evosl_no_of_commits+"&"+ sample_no_of_commits + "\\\\")
+	
+	print("Commits / day  &" + evosl_commit_per_day+"&"+sample_commit_per_day+ "\\\\")
+	
+	print("Commits\\textsubscript{$\\succ$} [\%] & "+ evosl_merge_percent+"&"+sample_merge_percent+ "\\\\")
+	#
+	
+	print("Commits\\textsubscript{MS} &"+evosl_model_commits_per+"&"+sample_model_commits_per+ "\\\\")
+
+	print("Authors &" +evosl_number_of_authors+"&"+sample_number_of_authors+ "\\\\")
+
+	
+	print("Authors\\textsubscript{MS} [\%] & "+evosl_model_author_per+"&"+sample_model_author_per+ "\\\\")
+
+	print("Durations [days] &" +evosl_lifetime_in_days+"&"+sample_lifetime_in_days+ "\\\\")
 
 	
 	
